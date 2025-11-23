@@ -3,121 +3,114 @@ import React from 'react';
 const Categories = () => {
     const categories = [
         {
-            id: 1,
-            title: "Wedding Floral",
-            items: "120+ Products",
-            price: "From $59",
-            image: "https://images.unsplash.com/photo-1523694576729-dc99e9c0f9b4?q=80&w=800&auto=format&fit=crop",
-            color: "bg-pink-100"
+            id: "01",
+            name: "Romantic Vibes",
+            desc: "Red Roses & Lilies",
+            image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop",
+            link: "Shop Love"
         },
         {
-            id: 2,
-            title: "Home Decor",
-            items: "85 Products",
-            price: "From $29",
-            image: "https://images.unsplash.com/photo-1533616688419-07a58529e2e4?q=80&w=800&auto=format&fit=crop",
-            color: "bg-purple-100"
+            id: "02",
+            name: "Wedding Exclusive",
+            desc: "Bridal Bouquets",
+            image: "https://images.unsplash.com/photo-1507646227500-4d389b0012be?q=80&w=800&auto=format&fit=crop",
+            link: "Plan Event"
         },
         {
-            id: 3,
-            title: "Gift Bundles",
-            items: "50+ Sets",
-            price: "From $45",
-            image: "https://images.unsplash.com/photo-1595231916356-a86217efd123?q=80&w=800&auto=format&fit=crop",
-            color: "bg-orange-100"
+            id: "03",
+            name: "Sympathy & Care",
+            desc: "White Lillies & Orchids",
+            image: "https://images.unsplash.com/photo-1599818464670-348df8be422e?q=80&w=800&auto=format&fit=crop",
+            link: "Send Care"
+        },
+        {
+            id: "04",
+            name: "Table Decors",
+            desc: "Small Arrangements",
+            image: "https://images.unsplash.com/photo-1582794543139-8ac92a9ab5d9?q=80&w=800&auto=format&fit=crop",
+            link: "Decorate"
         }
     ];
 
     return (
-        <section className="py-24 px-6 lg:px-12 bg-white relative overflow-hidden">
-            
-            {/* --- Background Decorative Text (Optional) --- */}
-            <div className="absolute top-10 left-0 w-full overflow-hidden select-none pointer-events-none opacity-[0.03]">
-                <h1 className="text-[10rem] md:text-[15rem] font-serif font-bold whitespace-nowrap text-gray-900 leading-none">
-                    BLOOMING BLOOMING
-                </h1>
-            </div>
-
-            <div className="container mx-auto relative z-10">
+        <section className="py-20 px-6 lg:px-12 bg-[#FDFBF7]">
+            <div className="container mx-auto">
                 
-                {/* --- HEADER --- */}
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                    <div>
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="h-[1px] w-8 bg-pink-500"></span>
-                            <span className="text-pink-500 font-bold uppercase tracking-widest text-xs">Shop By Category</span>
-                        </div>
-                        <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
-                            Curated <span className="italic font-light text-gray-400">Collections</span>
-                        </h2>
-                    </div>
-                    
-                    {/* View All Button */}
-                    <a href="#" className="hidden md:flex items-center gap-3 text-sm font-bold uppercase tracking-wider hover:text-pink-500 transition-colors group">
-                        See All Collections
-                        <span className="bg-gray-100 p-2 rounded-full group-hover:bg-pink-500 group-hover:text-white transition-all duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                        </span>
-                    </a>
+                {/* --- HEADER SECTION --- */}
+                <div className="flex flex-col items-center text-center mb-16">
+                    <span className="text-pink-500 font-bold tracking-[0.2em] uppercase text-xs mb-4">
+                        Our Collections
+                    </span>
+                    <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                        Blooms for Every <br/>
+                        <span className="italic text-gray-400 font-light">Emotion</span>
+                    </h2>
                 </div>
 
-                {/* --- CARDS GRID (ARCH SHAPE) --- */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-                    {categories.map((cat, index) => (
+                {/* --- CATEGORIES ROW --- */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {categories.map((cat) => (
                         <div 
                             key={cat.id} 
-                            className={`group relative flex flex-col items-center cursor-pointer ${index === 1 ? 'md:-translate-y-12' : ''}`} // মাঝখানের কার্ডটি একটু উপরে থাকবে
+                            className="group relative h-[450px] lg:h-[500px] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-lg shadow-gray-200 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-500"
                         >
-                            
-                            {/* IMAGE CONTAINER (ARCH SHAPE) */}
-                            <div className="relative w-full h-[450px] rounded-t-[10rem] rounded-b-[2rem] overflow-hidden shadow-2xl shadow-gray-200 border-4 border-white transition-all duration-500 ease-in-out transform group-hover:-translate-y-2">
+                            {/* Background Image */}
+                            <img 
+                                src={cat.image} 
+                                alt={cat.name} 
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                            />
+
+                            {/* Dark Gradient Overlay (Always visible but light, gets darker on hover) */}
+                            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+
+                            {/* Top Number Badge */}
+                            <div className="absolute top-6 left-6 w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-white font-serif text-lg backdrop-blur-sm">
+                                {cat.id}
+                            </div>
+
+                            {/* Bottom Content Area */}
+                            <div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                 
-                                {/* Image */}
-                                <img 
-                                    src={cat.image} 
-                                    alt={cat.title} 
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-
-                                {/* Overlay on Hover */}
-                                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300"></div>
-
-                                {/* Floating Tag (Top Right) */}
-                                <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-gray-800 shadow-sm opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                                    {cat.items}
+                                {/* Text Content */}
+                                <div className="mb-4">
+                                    <h3 className="text-white font-serif text-2xl font-bold mb-1 leading-tight">
+                                        {cat.name}
+                                    </h3>
+                                    <p className="text-pink-200 text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75">
+                                        {cat.desc}
+                                    </p>
                                 </div>
 
-                                {/* Bottom Glassmorphism Info (Initially hidden or minimal) */}
-                                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md rounded-3xl p-5 flex justify-between items-center shadow-lg transform translate-y-4 opacity-90 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                                    <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Starting at</p>
-                                        <p className="text-xl font-serif font-bold text-pink-500">{cat.price}</p>
-                                    </div>
-                                    <div className="h-10 w-10 bg-gray-900 rounded-full flex items-center justify-center text-white group-hover:bg-pink-500 transition-colors duration-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                                    </div>
+                                {/* Action Button (Expands on Hover) */}
+                                <div className="flex items-center gap-3">
+                                    <span className="h-[1px] w-0 bg-white group-hover:w-12 transition-all duration-500 delay-100"></span>
+                                    <span className="text-white text-xs font-bold uppercase tracking-widest opacity-80 hover:text-pink-400 transition-colors">
+                                        {cat.link}
+                                    </span>
                                 </div>
                             </div>
 
-                            {/* TITLE BELOW IMAGE */}
-                            <div className="mt-6 text-center">
-                                <h3 className="font-serif text-3xl font-bold text-gray-900 group-hover:text-pink-500 transition-colors duration-300">
-                                    {cat.title}
-                                </h3>
-                                <div className="h-1 w-12 bg-gray-200 mx-auto mt-3 rounded-full overflow-hidden">
-                                    <div className="h-full w-full bg-pink-500 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                                </div>
+                            {/* Center Icon (Appears on Hover) */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 delay-100 border border-white/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
                             </div>
 
                         </div>
                     ))}
                 </div>
 
-                {/* Mobile Only Button */}
-                <div className="mt-12 text-center md:hidden">
-                    <button className="bg-gray-900 text-white px-8 py-3 rounded-full font-medium shadow-lg w-full">View All Collections</button>
+                {/* --- BOTTOM TEXT (Trust Indicator) --- */}
+                <div className="mt-16 text-center">
+                    <p className="text-gray-500 text-sm">
+                        Can't find what you're looking for? 
+                        <a href="#" className="ml-2 font-bold text-gray-900 border-b border-gray-900 hover:text-pink-500 hover:border-pink-500 transition-all">
+                            Browse Full Catalog
+                        </a>
+                    </p>
                 </div>
-
             </div>
         </section>
     );
