@@ -1,14 +1,16 @@
 import React, { useState, useRef } from 'react';
 // Swiper ইম্পোর্ট
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFade } from 'swiper/modules';
+// মডিউল পরিবর্তন করা হয়েছে: EffectFade এর বদলে EffectCreative আনা হয়েছে
+import { Autoplay, EffectCreative } from 'swiper/modules';
 
 // Swiper CSS
 import 'swiper/css';
-import 'swiper/css/effect-fade';
+// Creative Effect এর CSS
+import 'swiper/css/effect-creative';
 
 const Hero = () => {
-    // 1. স্লাইডার ডেটা
+    // 1. স্লাইডার ডেটা (মোট ৫টি ইমেজ)
     const slides = [
         {
             id: 1,
@@ -36,6 +38,25 @@ const Hero = () => {
             bottomValue: "From $29",
             blobColor1: "#fef9c3", // Yellow
             blobColor2: "#dcfce7"  // Green
+        },
+        // নতুন ২ টি ইমেজ এড করা হলো
+        {
+            id: 4,
+            img: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?q=80&w=800&auto=format&fit=crop", 
+            topText: "Best Scent",
+            bottomLabel: "Exclusive",
+            bottomValue: "Bundle",
+            blobColor1: "#e0f2fe", // Light Blue
+            blobColor2: "#ddd6fe"  // Violet
+        },
+        {
+            id: 5,
+            img: "https://images.unsplash.com/photo-1494336934272-f0efcedfc71a?q=80&w=800&auto=format&fit=crop", 
+            topText: "Premium",
+            bottomLabel: "Quality",
+            bottomValue: "100% Fresh",
+            blobColor1: "#f3e8ff", // Purple-ish
+            blobColor2: "#fce7f3"  // Pink-ish
         }
     ];
 
@@ -101,11 +122,20 @@ const Hero = () => {
                     
                     <div className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform translate-z-0">
                         
+                        {/* SWIPER কনফিগারেশন পরিবর্তন করা হয়েছে সুন্দর এনিমেশনের জন্য */}
                         <Swiper
-                            modules={[Autoplay, EffectFade]}
-                            effect={'fade'}
-                            fadeEffect={{ crossFade: true }}
-                            speed={700}
+                            modules={[Autoplay, EffectCreative]} // EffectCreative মডিউল ব্যবহার
+                            effect={'creative'}
+                            creativeEffect={{
+                                prev: {
+                                    shadow: true,
+                                    translate: [0, 0, -400], // আগের ইমেজটি পিছনে চলে যাবে (Depth Effect)
+                                },
+                                next: {
+                                    translate: ['100%', 0, 0], // নতুন ইমেজটি ডান থেকে আসবে
+                                },
+                            }}
+                            speed={1000} // স্পিড একটু স্লো করা হয়েছে যাতে স্মুথ লাগে
                             loop={true}
                             autoplay={{
                                 delay: 4000,
@@ -114,12 +144,11 @@ const Hero = () => {
                             onBeforeInit={(swiper) => {
                                 swiperRef.current = swiper;
                             }}
-                            // এখানে realIndex সেট করা হচ্ছে যাতে লুপের সময়ও সঠিক ইনডেক্স পাওয়া যায়
                             onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                             className="w-full h-full"
                         >
                             {slides.map((slide) => (
-                                <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem]">
+                                <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem] bg-white">
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
