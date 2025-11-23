@@ -1,0 +1,203 @@
+import React, { useState, useRef } from 'react';
+// Swiper ইম্পোর্ট
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, EffectFade } from 'swiper/modules';
+
+// Swiper CSS
+import 'swiper/css';
+import 'swiper/css/effect-fade';
+
+const Hero = () => {
+    // 1. স্লাইডার ডেটা
+    const slides = [
+        {
+            id: 1,
+            img: "https://images.unsplash.com/photo-1591886960571-74d43a9d4166?q=80&w=800&auto=format&fit=crop", 
+            topText: "Top Rated",
+            bottomLabel: "Offer",
+            bottomValue: "30% Off",
+            blobColor1: "#fbcfe8", // Pink
+            blobColor2: "#e9d5ff"  // Purple
+        },
+        {
+            id: 2,
+            img: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=800&auto=format&fit=crop", 
+            topText: "Most Loved",
+            bottomLabel: "Delivery",
+            bottomValue: "Free Ship",
+            blobColor1: "#fee2e2", // Red
+            blobColor2: "#ffedd5"  // Orange
+        },
+        {
+            id: 3,
+            img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=800&auto=format&fit=crop", 
+            topText: "New Arrival",
+            bottomLabel: "Price",
+            bottomValue: "From $29",
+            blobColor1: "#fef9c3", // Yellow
+            blobColor2: "#dcfce7"  // Green
+        }
+    ];
+
+    const [activeIndex, setActiveIndex] = useState(0);
+    const swiperRef = useRef(null);
+
+    return (
+        // Section-এ bg-white দেওয়া হয়েছে যাতে mix-blend-multiply ঠিকভাবে কাজ করে
+        <section className="relative min-h-screen flex items-center pt-24 pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0">
+            
+            {/* --- DYNAMIC BACKGROUND BLOBS --- */}
+            <div 
+                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-1000 ease-in-out opacity-70"
+                style={{ backgroundColor: slides[activeIndex].blobColor1 }}
+            ></div>
+            
+            <div 
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-1000 ease-in-out opacity-70"
+                style={{ 
+                    backgroundColor: slides[activeIndex].blobColor2,
+                    animationDelay: '2s' 
+                }}
+            ></div>
+
+            {/* Main Content Container - এখানে z-10 দেওয়া হয়েছে যাতে ব্লবের উপরে থাকে */}
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center relative z-10">
+                
+                {/* --- LEFT TEXT CONTENT --- */}
+                <div className="text-center md:text-left order-2 md:order-1">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-pink-100 shadow-sm mb-6">
+                        <span className="flex h-2 w-2 rounded-full bg-pink-500 animate-pulse"></span>
+                        <span className="text-xs font-bold tracking-widest uppercase text-gray-500">New Collection</span>
+                    </div>
+                    <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold leading-[1.1] text-gray-900 mb-6">
+                        Let Beauty <br /> 
+                        <span className="text-pink-500 italic">Bloom Today.</span>
+                    </h1>
+                    <p className="text-gray-500 text-base md:text-lg mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed">
+                        Hand-crafted bouquets that speak the language of love. Delivered fresh from our garden to your special moments.
+                    </p>
+                    
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <button className="bg-gray-900 text-white px-8 py-4 rounded-full font-medium shadow-xl shadow-gray-900/20 hover:bg-pink-500 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
+                            <span>Shop Now</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                        </button>
+                        <button className="group bg-white text-gray-800 border border-gray-200 px-8 py-4 rounded-full font-medium shadow-sm hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-pink-50 text-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <span>Watch Story</span>
+                        </button>
+                    </div>
+
+                    <div className="mt-10 pt-8 border-t border-gray-200 flex items-center justify-center md:justify-start gap-8">
+                        <div><p className="text-2xl font-bold">15k+</p><p className="text-xs text-gray-500">Happy Users</p></div>
+                        <div><p className="text-2xl font-bold">4.9</p><p className="text-xs text-gray-500">Ratings</p></div>
+                    </div>
+                </div>
+                
+                {/* --- IMAGE SLIDER SECTION --- */}
+                <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full select-none">
+                    
+                    <div className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform translate-z-0">
+                        
+                        <Swiper
+                            modules={[Autoplay, EffectFade]}
+                            effect={'fade'}
+                            fadeEffect={{ crossFade: true }}
+                            speed={700}
+                            loop={true}
+                            autoplay={{
+                                delay: 4000,
+                                disableOnInteraction: false,
+                            }}
+                            onBeforeInit={(swiper) => {
+                                swiperRef.current = swiper;
+                            }}
+                            // এখানে realIndex সেট করা হচ্ছে যাতে লুপের সময়ও সঠিক ইনডেক্স পাওয়া যায়
+                            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                            className="w-full h-full"
+                        >
+                            {slides.map((slide) => (
+                                <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem]">
+                                    <img 
+                                        src={slide.img} 
+                                        alt="Flower Bouquet" 
+                                        className="w-full h-auto md:h-[600px] lg:h-[680px] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110"
+                                    />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+
+                        {/* --- DARK OVERLAY --- */}
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 pointer-events-none rounded-[2.5rem]"></div>
+
+                        {/* --- ARROWS --- */}
+                        <button 
+                            onClick={() => swiperRef.current?.slidePrev()}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 z-40 cursor-pointer"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <button 
+                            onClick={() => swiperRef.current?.slideNext()}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 z-40 cursor-pointer"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                        </button>
+
+                        {/* --- DOTS --- */}
+                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-40">
+                            {slides.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => swiperRef.current?.slideToLoop(index)}
+                                    className={`h-2 rounded-full transition-all duration-300 hover:scale-125 ${
+                                        activeIndex === index 
+                                        ? 'w-6 bg-pink-500' 
+                                        : 'w-2 bg-white/50 hover:bg-pink-500'
+                                    }`}
+                                ></button>
+                            ))}
+                        </div>
+
+                        {/* --- FLOATING CARDS (Top Left) --- */}
+                        <div className="absolute top-8 -left-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 animate-float z-30 transition-all duration-500 delay-100 group-hover:translate-x-2" style={{ animationDelay: '2s' }}>
+                            <div className="flex items-center gap-3">
+                                <div className="flex -space-x-3">
+                                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="user"/>
+                                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/65.jpg" alt="user"/>
+                                </div>
+                                <div>
+                                    <div className="flex text-yellow-400 text-[10px]">★★★★★</div>
+                                    {/* ডায়নামিক টেক্সট */}
+                                    <p className="text-[10px] font-bold text-gray-600 transition-all duration-300">
+                                        {slides[activeIndex].topText}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* --- FLOATING CARDS (Bottom Right) --- */}
+                        <div className="absolute bottom-10 -right-4 md:right-[-10px] bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 flex items-center gap-3 animate-float z-30 transition-all duration-500 group-hover:-translate-x-2" style={{ animationDelay: '1s' }}>
+                            <div className="bg-pink-500 p-2 rounded-full text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
+                            </div>
+                            <div>
+                                <p className="text-[10px] text-gray-500 uppercase font-bold transition-all duration-300">
+                                    {slides[activeIndex].bottomLabel}
+                                </p>
+                                <p className="text-base font-serif font-bold text-gray-900 transition-all duration-300">
+                                    {slides[activeIndex].bottomValue}
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default Hero;
