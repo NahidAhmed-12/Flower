@@ -38,7 +38,6 @@ const Hero = () => {
             blobColor1: "#fef9c3", // Yellow
             blobColor2: "#dcfce7"  // Green
         },
-        // নতুন ২ টি ইমেজ (Total 5)
         {
             id: 4,
             img: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?q=80&w=800&auto=format&fit=crop", 
@@ -67,12 +66,12 @@ const Hero = () => {
             
             {/* --- DYNAMIC BACKGROUND BLOBS --- */}
             <div 
-                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-in-out opacity-70"
+                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-300 ease-linear opacity-70"
                 style={{ backgroundColor: slides[activeIndex].blobColor1 }}
             ></div>
             
             <div 
-                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-in-out opacity-70"
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-300 ease-linear opacity-70"
                 style={{ 
                     backgroundColor: slides[activeIndex].blobColor2,
                     animationDelay: '2s' 
@@ -121,31 +120,30 @@ const Hero = () => {
                     <div className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform translate-z-0">
                         
                         {/* 
-                           CHANGE: Effect Creative "POP/ZOOM" Style 
-                           - Speed: 500 (Fast/Sudden)
-                           - Prev: Opacity 0, Scale 0 (Disappears fast)
-                           - Next: Starts from Scale 0 (Pops up suddenly)
+                           CHANGE: SUPER FAST / SNAP EFFECT
+                           - Speed: 250ms (চোখের পলকে পরিবর্তন হবে)
+                           - Effect: Creative (Zoom & Fade)
                         */}
                         <Swiper
                             modules={[Autoplay, EffectCreative]}
                             effect={'creative'}
-                            speed={500} // স্পিড বাড়ানো হয়েছে (১০০০ থেকে ৫০০) যাতে হঠাৎ মনে হয়
+                            speed={250} // এখানে স্পিড অনেক কমানো হয়েছে (Fast)
                             creativeEffect={{
                                 prev: {
                                     shadow: true,
-                                    translate: [0, 0, -200],
-                                    opacity: 0,
-                                    scale: 0.5, // আগের ছবিটা ছোট হয়ে মিলিয়ে যাবে
+                                    translate: [0, 0, -100],
+                                    opacity: 0, // আগের ছবি সাথে সাথে গায়েব হবে
                                 },
                                 next: {
-                                    translate: [0, 0, -200],
-                                    opacity: 0,
-                                    scale: 0.2, // নতুন ছবিটা ছোট থেকে হঠাৎ বড় হবে (POP Effect)
+                                    translate: [0, 0, 0],
+                                    scale: 0.8, // নতুন ছবি একটু ছোট থেকে...
+                                    opacity: 0, // ...এবং অদৃশ্য থেকে...
+                                    // ...হঠাৎ পূর্ণ সাইজে আসবে (Snap Zoom)
                                 },
                             }}
                             loop={true}
                             autoplay={{
-                                delay: 3500, // ৪ সেকেন্ডের বদলে ৩.৫ সেকেন্ড পর পর চেঞ্জ হবে
+                                delay: 3000, // ৩ সেকেন্ড পর পর পরিবর্তন হবে
                                 disableOnInteraction: false,
                             }}
                             onBeforeInit={(swiper) => {
@@ -166,18 +164,18 @@ const Hero = () => {
                         </Swiper>
 
                         {/* --- DARK OVERLAY --- */}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 pointer-events-none rounded-[2.5rem]"></div>
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none rounded-[2.5rem]"></div>
 
                         {/* --- ARROWS --- */}
                         <button 
                             onClick={() => swiperRef.current?.slidePrev()}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 z-40 cursor-pointer"
+                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 z-40 cursor-pointer"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                         </button>
                         <button 
                             onClick={() => swiperRef.current?.slideNext()}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 z-40 cursor-pointer"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 z-40 cursor-pointer"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                         </button>
@@ -188,7 +186,7 @@ const Hero = () => {
                                 <button
                                     key={index}
                                     onClick={() => swiperRef.current?.slideToLoop(index)}
-                                    className={`h-2 rounded-full transition-all duration-300 hover:scale-125 ${
+                                    className={`h-2 rounded-full transition-all duration-200 hover:scale-125 ${
                                         activeIndex === index 
                                         ? 'w-6 bg-pink-500' 
                                         : 'w-2 bg-white/50 hover:bg-pink-500'
@@ -198,7 +196,7 @@ const Hero = () => {
                         </div>
 
                         {/* --- FLOATING CARDS (Top Left) --- */}
-                        <div className="absolute top-8 -left-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 animate-float z-30 transition-all duration-500 delay-100 group-hover:translate-x-2" style={{ animationDelay: '2s' }}>
+                        <div className="absolute top-8 -left-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 animate-float z-30 transition-all duration-300 delay-100 group-hover:translate-x-2" style={{ animationDelay: '2s' }}>
                             <div className="flex items-center gap-3">
                                 <div className="flex -space-x-3">
                                     <img className="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="user"/>
@@ -206,7 +204,7 @@ const Hero = () => {
                                 </div>
                                 <div>
                                     <div className="flex text-yellow-400 text-[10px]">★★★★★</div>
-                                    <p className="text-[10px] font-bold text-gray-600 transition-all duration-300">
+                                    <p className="text-[10px] font-bold text-gray-600 transition-all duration-200">
                                         {slides[activeIndex].topText}
                                     </p>
                                 </div>
@@ -214,15 +212,15 @@ const Hero = () => {
                         </div>
 
                         {/* --- FLOATING CARDS (Bottom Right) --- */}
-                        <div className="absolute bottom-10 -right-4 md:right-[-10px] bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 flex items-center gap-3 animate-float z-30 transition-all duration-500 group-hover:-translate-x-2" style={{ animationDelay: '1s' }}>
+                        <div className="absolute bottom-10 -right-4 md:right-[-10px] bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 flex items-center gap-3 animate-float z-30 transition-all duration-300 group-hover:-translate-x-2" style={{ animationDelay: '1s' }}>
                             <div className="bg-pink-500 p-2 rounded-full text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
                             </div>
                             <div>
-                                <p className="text-[10px] text-gray-500 uppercase font-bold transition-all duration-300">
+                                <p className="text-[10px] text-gray-500 uppercase font-bold transition-all duration-200">
                                     {slides[activeIndex].bottomLabel}
                                 </p>
-                                <p className="text-base font-serif font-bold text-gray-900 transition-all duration-300">
+                                <p className="text-base font-serif font-bold text-gray-900 transition-all duration-200">
                                     {slides[activeIndex].bottomValue}
                                 </p>
                             </div>
