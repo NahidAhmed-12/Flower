@@ -1,16 +1,15 @@
 import React, { useState, useRef } from 'react';
 // Swiper ইম্পোর্ট
 import { Swiper, SwiperSlide } from 'swiper/react';
-// মডিউল পরিবর্তন করা হয়েছে: EffectFade এর বদলে EffectCreative আনা হয়েছে
+// মডিউল
 import { Autoplay, EffectCreative } from 'swiper/modules';
 
 // Swiper CSS
 import 'swiper/css';
-// Creative Effect এর CSS
 import 'swiper/css/effect-creative';
 
 const Hero = () => {
-    // 1. স্লাইডার ডেটা (মোট ৫টি ইমেজ)
+    // ১. স্লাইডার ডেটা (মোট ৫টি ইমেজ)
     const slides = [
         {
             id: 1,
@@ -39,7 +38,7 @@ const Hero = () => {
             blobColor1: "#fef9c3", // Yellow
             blobColor2: "#dcfce7"  // Green
         },
-        // নতুন ২ টি ইমেজ এড করা হলো
+        // নতুন ২ টি ইমেজ (Total 5)
         {
             id: 4,
             img: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?q=80&w=800&auto=format&fit=crop", 
@@ -64,24 +63,23 @@ const Hero = () => {
     const swiperRef = useRef(null);
 
     return (
-        // Section-এ bg-white দেওয়া হয়েছে যাতে mix-blend-multiply ঠিকভাবে কাজ করে
         <section className="relative min-h-screen flex items-center pt-24 pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0">
             
             {/* --- DYNAMIC BACKGROUND BLOBS --- */}
             <div 
-                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-1000 ease-in-out opacity-70"
+                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-in-out opacity-70"
                 style={{ backgroundColor: slides[activeIndex].blobColor1 }}
             ></div>
             
             <div 
-                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-1000 ease-in-out opacity-70"
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-in-out opacity-70"
                 style={{ 
                     backgroundColor: slides[activeIndex].blobColor2,
                     animationDelay: '2s' 
                 }}
             ></div>
 
-            {/* Main Content Container - এখানে z-10 দেওয়া হয়েছে যাতে ব্লবের উপরে থাকে */}
+            {/* Main Content Container */}
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center relative z-10">
                 
                 {/* --- LEFT TEXT CONTENT --- */}
@@ -122,23 +120,32 @@ const Hero = () => {
                     
                     <div className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform translate-z-0">
                         
-                        {/* SWIPER কনফিগারেশন পরিবর্তন করা হয়েছে সুন্দর এনিমেশনের জন্য */}
+                        {/* 
+                           CHANGE: Effect Creative "POP/ZOOM" Style 
+                           - Speed: 500 (Fast/Sudden)
+                           - Prev: Opacity 0, Scale 0 (Disappears fast)
+                           - Next: Starts from Scale 0 (Pops up suddenly)
+                        */}
                         <Swiper
-                            modules={[Autoplay, EffectCreative]} // EffectCreative মডিউল ব্যবহার
+                            modules={[Autoplay, EffectCreative]}
                             effect={'creative'}
+                            speed={500} // স্পিড বাড়ানো হয়েছে (১০০০ থেকে ৫০০) যাতে হঠাৎ মনে হয়
                             creativeEffect={{
                                 prev: {
                                     shadow: true,
-                                    translate: [0, 0, -400], // আগের ইমেজটি পিছনে চলে যাবে (Depth Effect)
+                                    translate: [0, 0, -200],
+                                    opacity: 0,
+                                    scale: 0.5, // আগের ছবিটা ছোট হয়ে মিলিয়ে যাবে
                                 },
                                 next: {
-                                    translate: ['100%', 0, 0], // নতুন ইমেজটি ডান থেকে আসবে
+                                    translate: [0, 0, -200],
+                                    opacity: 0,
+                                    scale: 0.2, // নতুন ছবিটা ছোট থেকে হঠাৎ বড় হবে (POP Effect)
                                 },
                             }}
-                            speed={1000} // স্পিড একটু স্লো করা হয়েছে যাতে স্মুথ লাগে
                             loop={true}
                             autoplay={{
-                                delay: 4000,
+                                delay: 3500, // ৪ সেকেন্ডের বদলে ৩.৫ সেকেন্ড পর পর চেঞ্জ হবে
                                 disableOnInteraction: false,
                             }}
                             onBeforeInit={(swiper) => {
@@ -199,7 +206,6 @@ const Hero = () => {
                                 </div>
                                 <div>
                                     <div className="flex text-yellow-400 text-[10px]">★★★★★</div>
-                                    {/* ডায়নামিক টেক্সট */}
                                     <p className="text-[10px] font-bold text-gray-600 transition-all duration-300">
                                         {slides[activeIndex].topText}
                                     </p>
