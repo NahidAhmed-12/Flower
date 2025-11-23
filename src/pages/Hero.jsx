@@ -31,7 +31,7 @@ const Hero = () => {
         },
         {
             id: 3,
-            img: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=800&auto=format&fit=crop", 
+            img: "https://plus.unsplash.com/premium_photo-1676272339523-54ed3e37cd5d?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
             topText: "New Arrival",
             bottomLabel: "Price",
             bottomValue: "From $29",
@@ -40,7 +40,7 @@ const Hero = () => {
         },
         {
             id: 4,
-            img: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?q=80&w=800&auto=format&fit=crop", 
+            img: "https://plus.unsplash.com/premium_photo-1678115814193-f739500b50e7?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
             topText: "Best Scent",
             bottomLabel: "Exclusive",
             bottomValue: "Bundle",
