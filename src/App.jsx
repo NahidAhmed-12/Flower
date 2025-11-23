@@ -1,6 +1,7 @@
 import Nevbar from './pages/Nevbar';
 import Hero from './pages/Hero';
 import Features from './pages/Features';
+import Categories from './pages/Categories';
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Nevbar />
       <Hero />
       <Features />
+      <Categories />
     </div>
   );
 }
