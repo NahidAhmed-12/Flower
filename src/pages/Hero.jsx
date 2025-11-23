@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 // Swiper ইম্পোর্ট
 import { Swiper, SwiperSlide } from 'swiper/react';
 // মডিউল
@@ -17,8 +17,8 @@ const Hero = () => {
             topText: "Top Rated",
             bottomLabel: "Offer",
             bottomValue: "30% Off",
-            blobColor1: "#fbcfe8", // Pink
-            blobColor2: "#e9d5ff"  // Purple
+            blobColor1: "#fbcfe8", 
+            blobColor2: "#e9d5ff"  
         },
         {
             id: 2,
@@ -26,8 +26,8 @@ const Hero = () => {
             topText: "Most Loved",
             bottomLabel: "Delivery",
             bottomValue: "Free Ship",
-            blobColor1: "#fee2e2", // Red
-            blobColor2: "#ffedd5"  // Orange
+            blobColor1: "#fee2e2", 
+            blobColor2: "#ffedd5"  
         },
         {
             id: 3,
@@ -35,8 +35,8 @@ const Hero = () => {
             topText: "New Arrival",
             bottomLabel: "Price",
             bottomValue: "From $29",
-            blobColor1: "#fef9c3", // Yellow
-            blobColor2: "#dcfce7"  // Green
+            blobColor1: "#fef9c3", 
+            blobColor2: "#dcfce7"  
         },
         {
             id: 4,
@@ -44,8 +44,8 @@ const Hero = () => {
             topText: "Best Scent",
             bottomLabel: "Exclusive",
             bottomValue: "Bundle",
-            blobColor1: "#e0f2fe", // Light Blue
-            blobColor2: "#ddd6fe"  // Violet
+            blobColor1: "#e0f2fe", 
+            blobColor2: "#ddd6fe"  
         },
         {
             id: 5,
@@ -53,13 +53,40 @@ const Hero = () => {
             topText: "Premium",
             bottomLabel: "Quality",
             bottomValue: "100% Fresh",
-            blobColor1: "#f3e8ff", // Purple-ish
-            blobColor2: "#fce7f3"  // Pink-ish
+            blobColor1: "#f3e8ff", 
+            blobColor2: "#fce7f3"  
         }
     ];
 
     const [activeIndex, setActiveIndex] = useState(0);
     const swiperRef = useRef(null);
+    
+    // --- NEW LOGIC START ---
+    const [showControls, setShowControls] = useState(true); // শুরুতে বাটন দেখাবে
+    const sliderContainerRef = useRef(null); // বাইরের ক্লিক ডিটেক্ট করার জন্য
+
+    useEffect(() => {
+        // ১. ১৫ সেকেন্ড পর বাটন অটোমেটিক হাইড হবে
+        const timer = setTimeout(() => {
+            setShowControls(false);
+        }, 15000);
+
+        // ২. স্লাইডারের বাইরে ক্লিক করলে বাটন হাইড হবে
+        const handleClickOutside = (event) => {
+            if (sliderContainerRef.current && !sliderContainerRef.current.contains(event.target)) {
+                setShowControls(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // ক্লিনআপ ফাংশন
+        return () => {
+            clearTimeout(timer);
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+    // --- NEW LOGIC END ---
 
     return (
         <section className="relative min-h-screen flex items-center pt-24 pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0">
@@ -117,33 +144,30 @@ const Hero = () => {
                 {/* --- IMAGE SLIDER SECTION --- */}
                 <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full select-none">
                     
-                    <div className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform translate-z-0">
+                    <div 
+                        ref={sliderContainerRef} // এখানে ref দেওয়া হয়েছে ক্লিক ডিটেক্ট করার জন্য
+                        className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform translate-z-0"
+                    >
                         
-                        {/* 
-                           CHANGE: SUPER FAST / SNAP EFFECT
-                           - Speed: 250ms (চোখের পলকে পরিবর্তন হবে)
-                           - Effect: Creative (Zoom & Fade)
-                        */}
                         <Swiper
                             modules={[Autoplay, EffectCreative]}
                             effect={'creative'}
-                            speed={250} // এখানে স্পিড অনেক কমানো হয়েছে (Fast)
+                            speed={250} 
                             creativeEffect={{
                                 prev: {
                                     shadow: true,
                                     translate: [0, 0, -100],
-                                    opacity: 0, // আগের ছবি সাথে সাথে গায়েব হবে
+                                    opacity: 0, 
                                 },
                                 next: {
                                     translate: [0, 0, 0],
-                                    scale: 0.8, // নতুন ছবি একটু ছোট থেকে...
-                                    opacity: 0, // ...এবং অদৃশ্য থেকে...
-                                    // ...হঠাৎ পূর্ণ সাইজে আসবে (Snap Zoom)
+                                    scale: 0.8, 
+                                    opacity: 0, 
                                 },
                             }}
                             loop={true}
                             autoplay={{
-                                delay: 3000, // ৩ সেকেন্ড পর পর পরিবর্তন হবে
+                                delay: 3000, 
                                 disableOnInteraction: false,
                             }}
                             onBeforeInit={(swiper) => {
@@ -154,10 +178,15 @@ const Hero = () => {
                         >
                             {slides.map((slide) => (
                                 <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem] bg-white">
+                                    {/* 
+                                        IMAGE FIX:
+                                        - h-auto এর বদলে h-[450px] (mobile) এবং md:h-[650px] (desktop) দেওয়া হয়েছে।
+                                        - object-cover ব্যবহার করা হয়েছে যাতে ছবি চ্যাপ্টা না হয়ে যায়।
+                                    */}
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
-                                        className="w-full h-auto md:h-[600px] lg:h-[680px] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110"
+                                        className="w-full h-[450px] md:h-[600px] lg:h-[650px] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110"
                                     />
                                 </SwiperSlide>
                             ))}
@@ -166,16 +195,26 @@ const Hero = () => {
                         {/* --- DARK OVERLAY --- */}
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none rounded-[2.5rem]"></div>
 
-                        {/* --- ARROWS --- */}
+                        {/* --- ARROWS (Modified for 15s Auto Show + Hover) --- */}
                         <button 
                             onClick={() => swiperRef.current?.slidePrev()}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 z-40 cursor-pointer"
+                            // Logic: যদি showControls true হয়, তাহলে দেখাবে (opacity-100), নাহলে hover এ দেখাবে।
+                            className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
+                                showControls 
+                                ? 'opacity-100 translate-x-0' 
+                                : 'opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'
+                            }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                         </button>
+                        
                         <button 
                             onClick={() => swiperRef.current?.slideNext()}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 z-40 cursor-pointer"
+                            className={`absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
+                                showControls 
+                                ? 'opacity-100 translate-x-0' 
+                                : 'opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'
+                            }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                         </button>
