@@ -13,6 +13,7 @@ function App() {
       <Features />
       <Categories />
       <BestSelling />
+      <Offer />
     </div>
   );
 }
