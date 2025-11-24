@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 const Categories = () => {
+    // স্লাইডারের জন্য Ref ব্যবহার করা হচ্ছে
+    const scrollContainerRef = useRef(null);
+
     const categories = [
         {
             id: "01",
@@ -29,97 +32,129 @@ const Categories = () => {
             count: "32 Items",
             image: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=800&auto=format&fit=crop",
             link: "Decorate"
+        },
+        // স্লাইডার বোঝানোর জন্য আরও ২টা এক্সট্রা ক্যাটাগরি দিলাম
+        {
+            id: "05",
+            name: "Birthday Bash",
+            count: "50 Items",
+            image: "https://images.unsplash.com/photo-1530299156074-25d973a60b8e?q=80&w=800&auto=format&fit=crop",
+            link: "Celebrate"
+        },
+        {
+            id: "06",
+            name: "Office Plants",
+            count: "12 Items",
+            image: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?q=80&w=800&auto=format&fit=crop",
+            link: "Greenery"
         }
     ];
 
-    // Reusable Arrow Icon Component (SVG)
-    const ArrowIcon = ({ className }) => (
-        <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            className={className}
-        >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
+    // স্ক্রল করার ফাংশন
+    const scroll = (direction) => {
+        const container = scrollContainerRef.current;
+        if (container) {
+            // কার্ডের প্রস্থ (320px) + গ্যাপ (24px) = ৩৪৫ পিক্সেল সরাবে
+            const scrollAmount = 345; 
+            container.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    // আইকন কম্পোনেন্ট (SVG)
+    const ArrowLeft = () => (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+        </svg>
+    );
+
+    const ArrowRight = () => (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m9 18 6-6-6-6"/>
         </svg>
     );
 
     return (
-        <section className="py-24 px-6 lg:px-12 bg-[#FAF9F6]">
-            <div className="container mx-auto">
+        <section className="py-24 bg-[#FAF9F6] relative overflow-hidden">
+            <div className="container mx-auto px-6 lg:px-12">
                 
-                {/* --- HEADER SECTION --- */}
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                    <div className="max-w-2xl">
+                {/* --- HEADER SECTION WITH BUTTONS --- */}
+                <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                    <div className="max-w-2xl mb-6 md:mb-0">
                         <span className="text-pink-500 font-medium tracking-widest uppercase text-sm mb-2 block">
-                            Curated Collections
+                            Our Collections
                         </span>
-                        <h2 className="font-serif text-4xl md:text-6xl font-medium text-stone-800 leading-[1.1]">
-                            Choose the perfect <br />
-                            <span className="text-stone-400 italic">blooms for you.</span>
+                        <h2 className="font-serif text-4xl md:text-5xl font-medium text-stone-800 leading-tight">
+                            Fresh Blooms <span className="text-stone-400 italic">For You</span>
                         </h2>
                     </div>
-                    
-                    {/* View All Button (Desktop) */}
-                    <a href="#" className="hidden md:flex items-center gap-2 text-stone-800 hover:text-pink-600 transition-colors font-medium border-b border-stone-300 pb-1 hover:border-pink-600">
-                        View Full Catalog
-                        <ArrowIcon className="w-5 h-5" />
-                    </a>
+
+                    {/* NAVIGATION BUTTONS */}
+                    <div className="flex gap-4">
+                        <button 
+                            onClick={() => scroll('left')}
+                            className="w-12 h-12 rounded-full border border-stone-300 flex items-center justify-center text-stone-600 hover:bg-pink-500 hover:text-white hover:border-pink-500 transition-all duration-300 active:scale-95"
+                        >
+                            <ArrowLeft />
+                        </button>
+                        <button 
+                            onClick={() => scroll('right')}
+                            className="w-12 h-12 rounded-full border border-stone-300 flex items-center justify-center text-stone-600 hover:bg-pink-500 hover:text-white hover:border-pink-500 transition-all duration-300 active:scale-95"
+                        >
+                            <ArrowRight />
+                        </button>
+                    </div>
                 </div>
 
-                {/* --- CATEGORIES GRID --- */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {/* --- SLIDER CONTAINER --- */}
+                {/* scrollbar-hide ক্লাসটি কাস্টম CSS, নিচে স্টাইল দেওয়া আছে */}
+                <div 
+                    ref={scrollContainerRef}
+                    className="flex gap-6 overflow-x-auto pb-8 scroll-smooth scrollbar-hide select-none cursor-grab active:cursor-grabbing"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} // Firefox & IE Hide Scrollbar
+                >
                     {categories.map((cat) => (
                         <div 
                             key={cat.id} 
-                            className="group cursor-pointer flex flex-col gap-4"
+                            className="min-w-[300px] md:min-w-[340px] group flex flex-col gap-4"
                         >
-                            {/* Image Container - Arch Shape Design */}
-                            <div className="relative overflow-hidden rounded-t-[120px] rounded-b-2xl h-[400px] w-full shadow-sm">
-                                {/* Image with Zoom Effect */}
+                            {/* Image Container - Arch Shape */}
+                            <div className="relative overflow-hidden rounded-t-[120px] rounded-b-2xl h-[420px] w-full bg-gray-100 shadow-sm">
                                 <img 
                                     src={cat.image} 
                                     alt={cat.name} 
                                     className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
                                 />
                                 
-                                {/* Overlay on Hover */}
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                {/* Dark Gradient Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 transition-opacity duration-500"></div>
 
-                                {/* Floating Action Button */}
-                                <div className="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
-                                    <ArrowIcon className="w-5 h-5 text-pink-500" />
+                                {/* Bottom Text inside Image (Optional Look) */}
+                                <div className="absolute bottom-0 left-0 w-full p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                                    <h3 className="font-serif text-2xl text-white mb-1">
+                                        {cat.name}
+                                    </h3>
+                                    <p className="text-white/80 text-sm font-medium flex items-center gap-2">
+                                        {cat.count} 
+                                        <span className="w-8 h-[1px] bg-white/50 inline-block"></span>
+                                        {cat.link}
+                                    </p>
                                 </div>
-                            </div>
-
-                            {/* Content Under Image */}
-                            <div className="text-center mt-2 space-y-1">
-                                <h3 className="font-serif text-2xl text-stone-800 group-hover:text-pink-600 transition-colors">
-                                    {cat.name}
-                                </h3>
-                                <p className="text-stone-500 text-sm font-light tracking-wide">
-                                    {cat.count}
-                                </p>
                             </div>
                         </div>
                     ))}
                 </div>
-                
-                {/* Mobile View All Button */}
-                <div className="mt-12 text-center md:hidden">
-                    <a href="#" className="inline-flex items-center gap-2 text-stone-800 font-medium border-b border-stone-800 pb-1">
-                        View Full Catalog
-                        <ArrowIcon className="w-5 h-5" />
-                    </a>
-                </div>
+
             </div>
+            
+            {/* Hide Scrollbar Style Injection for Webkit Browsers (Chrome/Safari) */}
+            <style>{`
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
         </section>
     );
 };
