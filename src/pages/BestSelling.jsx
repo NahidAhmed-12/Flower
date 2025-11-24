@@ -10,7 +10,7 @@ const BestSelling = () => {
             price: "$45.00",
             oldPrice: "$55.00",
             rating: 5.0,
-            img: "https://images.unsplash.com/photo-1582794543139-8ac92a9abf30?q=80&w=800&auto=format&fit=crop",
+            img: "/Selling/img-1.webp",
             tag: "Sale"
         },
         {
@@ -19,7 +19,7 @@ const BestSelling = () => {
             price: "$38.00",
             oldPrice: null,
             rating: 4.8,
-            img: "https://images.unsplash.com/photo-1595231916356-a86217eff126?q=80&w=800&auto=format&fit=crop",
+            img: "/Selling/img-2.webp",
             tag: "New"
         },
         {
@@ -28,7 +28,7 @@ const BestSelling = () => {
             price: "$65.00",
             oldPrice: "$80.00",
             rating: 4.9,
-            img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=800&auto=format&fit=crop",
+            img: "/Selling/img-3.webp",
             tag: "Popular"
         },
         {
@@ -37,7 +37,7 @@ const BestSelling = () => {
             price: "$42.00",
             oldPrice: null,
             rating: 4.7,
-            img: "https://images.unsplash.com/photo-1563241527-3af6d06976e4?q=80&w=800&auto=format&fit=crop",
+            img: "/Selling/img-4.webp",
             tag: null
         }
     ];

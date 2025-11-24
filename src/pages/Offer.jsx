@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 const Offer = () => {
     // স্লাইডারের জন্য ছবির লিস্ট
     const images = [
-        "https://images.unsplash.com/photo-1562690868-60bbe7293e94?q=80&w=1000&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1582794543139-8ac92a900275?q=80&w=1000&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=1000&auto=format&fit=crop"
+        "/Special/img-1.webp",
+        "/Special/img-2.webp",
+        "/Special/img-3.webp"
     ];
 
     const [currentSlide, setCurrentSlide] = useState(0);
