@@ -84,11 +84,11 @@ const Hero = () => {
     }, []);
 
     return (
-        // --- পরিবর্তন ১: section এর স্টাইল ---
-        // আগে ছিল: min-h-screen flex items-center pt-24 pb-12
-        // পরিবর্তন: h-auto (কন্টেন্ট অনুযায়ী হাইট) এবং lg:h-screen (বড় স্ক্রিনে ফিক্সড হাইট)
-        // py-28 (উপরে নিচে ফিক্সড প্যাডিং ফোনের ডেস্কটপ মোডের জন্য)
-        <section className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:py-0 px-6 lg:px-12 overflow-hidden bg-white z-0">
+        // --- পরিবর্তনসমূহ এখানে করা হয়েছে ---
+        // ১. lg:min-h-screen ব্যবহার করা হয়েছে যাতে বড় স্ক্রিনে হাইট ঠিক থাকে।
+        // ২. lg:pt-32 ব্যবহার করা হয়েছে যাতে পিসি স্ক্রিনে ইমেজ Navbar এর নিচে না চলে যায়।
+        // ৩. items-center এর সাথে lg:pb-10 দেওয়া হয়েছে ব্যালেন্স করার জন্য।
+        <section className="relative w-full min-h-screen flex items-center py-28 lg:py-0 lg:pt-32 lg:pb-10 px-6 lg:px-12 overflow-hidden bg-white z-0">
             
             {/* --- DYNAMIC BACKGROUND BLOBS --- */}
             <div 
@@ -180,8 +180,6 @@ const Hero = () => {
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
-                                        // --- পরিবর্তন ২: ইমেজের হাইট ---
-                                        // max-h-[80vh] যোগ করা হয়েছে যাতে ইমেজ অনেক বেশি লম্বা না হয়ে যায় ফোনের স্ক্রিনে
                                         className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110"
                                     />
                                 </SwiperSlide>
