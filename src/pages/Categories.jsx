@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react'; // আইকনের জন্য (install lucide-react if needed)
 
 const Categories = () => {
     const categories = [
@@ -7,31 +6,50 @@ const Categories = () => {
             id: "01",
             name: "Romantic Vibes",
             count: "45 Items",
-            image: "https://images.unsplash.com/photo-1561547538-d3a8d9d436b9?q=80&w=800&auto=format&fit=crop", // সুন্দর লাল গোলাপের তোড়া
+            image: "https://images.unsplash.com/photo-1561547538-d3a8d9d436b9?q=80&w=800&auto=format&fit=crop",
             link: "Shop Love"
         },
         {
             id: "02",
             name: "Wedding Bloom",
             count: "28 Items",
-            image: "https://images.unsplash.com/photo-1556125574-d7f27ec36a06?q=80&w=800&auto=format&fit=crop", // ব্রাইডাল ও সফট কালার
+            image: "https://images.unsplash.com/photo-1556125574-d7f27ec36a06?q=80&w=800&auto=format&fit=crop",
             link: "Plan Event"
         },
         {
             id: "03",
             name: "Sympathy & Care",
             count: "16 Items",
-            image: "https://images.unsplash.com/photo-1603621766051-42c748c91828?q=80&w=800&auto=format&fit=crop", // সাদা লিলি, শান্ত ভাব
+            image: "https://images.unsplash.com/photo-1603621766051-42c748c91828?q=80&w=800&auto=format&fit=crop",
             link: "Send Care"
         },
         {
             id: "04",
             name: "Home Decor",
             count: "32 Items",
-            image: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=800&auto=format&fit=crop", // টেবিল সাজানোর ফুল
+            image: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=800&auto=format&fit=crop",
             link: "Decorate"
         }
     ];
+
+    // Reusable Arrow Icon Component (SVG)
+    const ArrowIcon = ({ className }) => (
+        <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="24" 
+            height="24" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            className={className}
+        >
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+        </svg>
+    );
 
     return (
         <section className="py-24 px-6 lg:px-12 bg-[#FAF9F6]">
@@ -49,10 +67,10 @@ const Categories = () => {
                         </h2>
                     </div>
                     
-                    {/* Optional: View All Button */}
+                    {/* View All Button (Desktop) */}
                     <a href="#" className="hidden md:flex items-center gap-2 text-stone-800 hover:text-pink-600 transition-colors font-medium border-b border-stone-300 pb-1 hover:border-pink-600">
                         View Full Catalog
-                        <ArrowRight size={18} />
+                        <ArrowIcon className="w-5 h-5" />
                     </a>
                 </div>
 
@@ -77,7 +95,7 @@ const Categories = () => {
 
                                 {/* Floating Action Button */}
                                 <div className="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
-                                    <ArrowRight className="text-pink-500" size={20} />
+                                    <ArrowIcon className="w-5 h-5 text-pink-500" />
                                 </div>
                             </div>
 
@@ -94,11 +112,11 @@ const Categories = () => {
                     ))}
                 </div>
                 
-                {/* Mobile View All Button (Visible only on small screens) */}
+                {/* Mobile View All Button */}
                 <div className="mt-12 text-center md:hidden">
                     <a href="#" className="inline-flex items-center gap-2 text-stone-800 font-medium border-b border-stone-800 pb-1">
                         View Full Catalog
-                        <ArrowRight size={18} />
+                        <ArrowIcon className="w-5 h-5" />
                     </a>
                 </div>
             </div>
