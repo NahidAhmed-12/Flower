@@ -8,35 +8,35 @@ const Categories = () => {
             id: "01",
             name: "Romantic Love",
             price: "Start from $29",
-            image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=800&auto=format&fit=crop", // Deep Red Roses
+            image: "/Explore/img-1.webp", // Deep Red Roses
             link: "Shop Collection"
         },
         {
             id: "02",
             name: "Wedding Elegance",
             price: "Start from $150",
-            image: "https://images.unsplash.com/photo-1523693913904-a5621772d0a6?q=80&w=800&auto=format&fit=crop", // White & Soft Pink
+            image: "/Explore/img-2.webp", // White & Soft Pink
             link: "Plan Wedding"
         },
         {
             id: "03",
             name: "Sympathy Lilies",
             price: "Start from $45",
-            image: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?q=80&w=800&auto=format&fit=crop", // Peaceful White
+            image: "/Explore/img-3.webp", // Peaceful White
             link: "Send Comfort"
         },
         {
             id: "04",
             name: "Luxury Decor",
             price: "Start from $60",
-            image: "https://images.unsplash.com/photo-1615529328331-f8917597711f?q=80&w=800&auto=format&fit=crop", // Artistic Vase
+            image: "/Explore/img-4.webp", // Artistic Vase
             link: "View Decor"
         },
         {
             id: "05",
             name: "Spring Bundle",
             price: "Start from $35",
-            image: "https://images.unsplash.com/photo-1490750967868-58cb75063ed4?q=80&w=800&auto=format&fit=crop", // Colorful Tulips
+            image: "/Explore/img-5.webp", // Colorful Tulips
             link: "Shop Season"
         }
     ];

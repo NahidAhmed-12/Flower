@@ -13,7 +13,7 @@ const Hero = () => {
     const slides = [
         {
             id: 1,
-            img: "/img-3.webp", 
+            img: "/Hero/img-3.webp", 
             topText: "Top Rated",
             bottomLabel: "Offer",
             bottomValue: "30% Off",
@@ -22,7 +22,7 @@ const Hero = () => {
         },
         {
             id: 2,
-            img: "/img-2.webp", 
+            img: "/Hero/img-2.webp", 
             topText: "Most Loved",
             bottomLabel: "Delivery",
             bottomValue: "Free Ship",
@@ -31,7 +31,7 @@ const Hero = () => {
         },
         {
             id: 3,
-            img: "/img-1.webp", 
+            img: "/Hero/img-1.webp", 
             topText: "New Arrival",
             bottomLabel: "Price",
             bottomValue: "From $29",
@@ -40,16 +40,16 @@ const Hero = () => {
         },
         {
             id: 4,
-            img: "img-4.webp", 
+            img: "/Hero/img-4.webp", 
             topText: "Best Scent",
             bottomLabel: "Exclusive",
             bottomValue: "Bundle",
             blobColor1: "#e0f2fe", 
-            blobColor2: "#defffd"  
+            blobColor2: "#fff1d9"  
         },
         {
             id: 5,
-            img: "/img-5.webp", 
+            img: "/Hero/img-5.webp", 
             topText: "Premium",
             bottomLabel: "Quality",
             bottomValue: "100% Fresh",
