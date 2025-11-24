@@ -84,11 +84,12 @@ const Hero = () => {
     }, []);
 
     return (
-        // --- পরিবর্তনসমূহ এখানে করা হয়েছে ---
-        // ১. lg:min-h-screen ব্যবহার করা হয়েছে যাতে বড় স্ক্রিনে হাইট ঠিক থাকে।
-        // ২. lg:pt-32 ব্যবহার করা হয়েছে যাতে পিসি স্ক্রিনে ইমেজ Navbar এর নিচে না চলে যায়।
-        // ৩. items-center এর সাথে lg:pb-10 দেওয়া হয়েছে ব্যালেন্স করার জন্য।
-        <section className="relative w-full min-h-screen flex items-center py-28 lg:py-0 lg:pt-32 lg:pb-10 px-6 lg:px-12 overflow-hidden bg-white z-0">
+        // --- পরিবর্তন ১: Section এর স্টাইল ---
+        // আগে ছিল: lg:py-0 (যা ইমেজকে একদম টপে নিয়ে যাচ্ছিল)
+        // ফিক্স: lg:pt-32 (পিসির জন্য উপরে প্যাডিং দেওয়া হয়েছে যাতে ন্যাভবারের নিচে না যায়)
+        // এবং lg:items-center রাখা হয়েছে যাতে ভার্টিকালি দেখতে সুন্দর লাগে, কিন্তু প্যাডিং এর কারণে কন্টেন্ট নিচে থাকবে।
+        // Phone screen এর জন্য py-28 ঠিক রাখা হয়েছে।
+        <section className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:pt-32 lg:pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0">
             
             {/* --- DYNAMIC BACKGROUND BLOBS --- */}
             <div 
