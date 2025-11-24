@@ -1,115 +1,105 @@
 import React from 'react';
+import { ArrowRight } from 'lucide-react'; // আইকনের জন্য (install lucide-react if needed)
 
 const Categories = () => {
     const categories = [
         {
             id: "01",
             name: "Romantic Vibes",
-            desc: "Red Roses & Lilies",
-            image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop",
+            count: "45 Items",
+            image: "https://images.unsplash.com/photo-1561547538-d3a8d9d436b9?q=80&w=800&auto=format&fit=crop", // সুন্দর লাল গোলাপের তোড়া
             link: "Shop Love"
         },
         {
             id: "02",
-            name: "Wedding Exclusive",
-            desc: "Bridal Bouquets",
-            image: "https://images.unsplash.com/photo-1507646227500-4d389b0012be?q=80&w=800&auto=format&fit=crop",
+            name: "Wedding Bloom",
+            count: "28 Items",
+            image: "https://images.unsplash.com/photo-1556125574-d7f27ec36a06?q=80&w=800&auto=format&fit=crop", // ব্রাইডাল ও সফট কালার
             link: "Plan Event"
         },
         {
             id: "03",
             name: "Sympathy & Care",
-            desc: "White Lillies & Orchids",
-            image: "https://images.unsplash.com/photo-1599818464670-348df8be422e?q=80&w=800&auto=format&fit=crop",
+            count: "16 Items",
+            image: "https://images.unsplash.com/photo-1603621766051-42c748c91828?q=80&w=800&auto=format&fit=crop", // সাদা লিলি, শান্ত ভাব
             link: "Send Care"
         },
         {
             id: "04",
-            name: "Table Decors",
-            desc: "Small Arrangements",
-            image: "https://images.unsplash.com/photo-1582794543139-8ac92a9ab5d9?q=80&w=800&auto=format&fit=crop",
+            name: "Home Decor",
+            count: "32 Items",
+            image: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=800&auto=format&fit=crop", // টেবিল সাজানোর ফুল
             link: "Decorate"
         }
     ];
 
     return (
-        <section className="py-20 px-6 lg:px-12 bg-[#FDFBF7]">
+        <section className="py-24 px-6 lg:px-12 bg-[#FAF9F6]">
             <div className="container mx-auto">
                 
                 {/* --- HEADER SECTION --- */}
-                <div className="flex flex-col items-center text-center mb-16">
-                    <span className="text-pink-500 font-bold tracking-[0.2em] uppercase text-xs mb-4">
-                        Our Collections
-                    </span>
-                    <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                        Blooms for Every <br/>
-                        <span className="italic text-gray-400 font-light">Emotion</span>
-                    </h2>
+                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                    <div className="max-w-2xl">
+                        <span className="text-pink-500 font-medium tracking-widest uppercase text-sm mb-2 block">
+                            Curated Collections
+                        </span>
+                        <h2 className="font-serif text-4xl md:text-6xl font-medium text-stone-800 leading-[1.1]">
+                            Choose the perfect <br />
+                            <span className="text-stone-400 italic">blooms for you.</span>
+                        </h2>
+                    </div>
+                    
+                    {/* Optional: View All Button */}
+                    <a href="#" className="hidden md:flex items-center gap-2 text-stone-800 hover:text-pink-600 transition-colors font-medium border-b border-stone-300 pb-1 hover:border-pink-600">
+                        View Full Catalog
+                        <ArrowRight size={18} />
+                    </a>
                 </div>
 
-                {/* --- CATEGORIES ROW --- */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* --- CATEGORIES GRID --- */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {categories.map((cat) => (
                         <div 
                             key={cat.id} 
-                            className="group relative h-[450px] lg:h-[500px] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-lg shadow-gray-200 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-500"
+                            className="group cursor-pointer flex flex-col gap-4"
                         >
-                            {/* Background Image */}
-                            <img 
-                                src={cat.image} 
-                                alt={cat.name} 
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                            />
-
-                            {/* Dark Gradient Overlay (Always visible but light, gets darker on hover) */}
-                            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
-
-                            {/* Top Number Badge */}
-                            <div className="absolute top-6 left-6 w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-white font-serif text-lg backdrop-blur-sm">
-                                {cat.id}
-                            </div>
-
-                            {/* Bottom Content Area */}
-                            <div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            {/* Image Container - Arch Shape Design */}
+                            <div className="relative overflow-hidden rounded-t-[120px] rounded-b-2xl h-[400px] w-full shadow-sm">
+                                {/* Image with Zoom Effect */}
+                                <img 
+                                    src={cat.image} 
+                                    alt={cat.name} 
+                                    className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                                />
                                 
-                                {/* Text Content */}
-                                <div className="mb-4">
-                                    <h3 className="text-white font-serif text-2xl font-bold mb-1 leading-tight">
-                                        {cat.name}
-                                    </h3>
-                                    <p className="text-pink-200 text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75">
-                                        {cat.desc}
-                                    </p>
-                                </div>
+                                {/* Overlay on Hover */}
+                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                                {/* Action Button (Expands on Hover) */}
-                                <div className="flex items-center gap-3">
-                                    <span className="h-[1px] w-0 bg-white group-hover:w-12 transition-all duration-500 delay-100"></span>
-                                    <span className="text-white text-xs font-bold uppercase tracking-widest opacity-80 hover:text-pink-400 transition-colors">
-                                        {cat.link}
-                                    </span>
+                                {/* Floating Action Button */}
+                                <div className="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+                                    <ArrowRight className="text-pink-500" size={20} />
                                 </div>
                             </div>
 
-                            {/* Center Icon (Appears on Hover) */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 delay-100 border border-white/40">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
+                            {/* Content Under Image */}
+                            <div className="text-center mt-2 space-y-1">
+                                <h3 className="font-serif text-2xl text-stone-800 group-hover:text-pink-600 transition-colors">
+                                    {cat.name}
+                                </h3>
+                                <p className="text-stone-500 text-sm font-light tracking-wide">
+                                    {cat.count}
+                                </p>
                             </div>
-
                         </div>
                     ))}
                 </div>
-
-                {/* --- BOTTOM TEXT (Trust Indicator) --- */}
-                <div className="mt-16 text-center">
-                    <p className="text-gray-500 text-sm">
-                        Can't find what you're looking for? 
-                        <a href="#" className="ml-2 font-bold text-gray-900 border-b border-gray-900 hover:text-pink-500 hover:border-pink-500 transition-all">
-                            Browse Full Catalog
-                        </a>
-                    </p>
+                
+                {/* Mobile View All Button (Visible only on small screens) */}
+                <div className="mt-12 text-center md:hidden">
+                    <a href="#" className="inline-flex items-center gap-2 text-stone-800 font-medium border-b border-stone-800 pb-1">
+                        View Full Catalog
+                        <ArrowRight size={18} />
+                    </a>
                 </div>
             </div>
         </section>
