@@ -4,6 +4,7 @@ import Features from './pages/Features';
 import Categories from './pages/Categories';
 import BestSelling from './pages/BestSelling';
 import Offer from './pages/Offer';
+import Testimonials from './pages/Testimonials';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Categories />
       <BestSelling />
       <Offer />
+      <Testimonials />
     </div>
   );
 }
