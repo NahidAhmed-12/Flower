@@ -78,33 +78,6 @@ const Features = () => {
                         </div>
                     ))}
                 </div>
-
-                {/* --- PROMO BANNER (Optional Bridge to next section) --- */}
-                <div className="mt-20 rounded-[2.5rem] bg-gray-900 overflow-hidden relative flex flex-col md:flex-row items-center justify-between p-8 md:p-12 shadow-2xl shadow-gray-900/20">
-                    
-                    {/* Background Pattern */}
-                    <div className="absolute inset-0 opacity-20">
-                         <svg className="h-full w-full text-gray-700" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none">
-                             <path d="M0 100 C 20 0 50 0 100 100 Z"></path>
-                         </svg>
-                    </div>
-
-                    <div className="relative z-10 mb-8 md:mb-0 text-center md:text-left">
-                        <h3 className="font-serif text-3xl text-white mb-2">Get <span className="text-pink-400 italic">15% Off</span> Your First Order</h3>
-                        <p className="text-gray-400">Subscribe to our newsletter and start blooming today.</p>
-                    </div>
-
-                    <div className="relative z-10 w-full md:w-auto flex flex-col sm:flex-row gap-3">
-                        <input 
-                            type="email" 
-                            placeholder="Enter your email" 
-                            className="px-6 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 focus:bg-white/20 transition-all w-full md:w-64 backdrop-blur-sm"
-                        />
-                        <button className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-full font-medium shadow-lg shadow-pink-500/30 transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
-                            Subscribe
-                        </button>
-                    </div>
-                </div>
             </div>
         </section>
     );
