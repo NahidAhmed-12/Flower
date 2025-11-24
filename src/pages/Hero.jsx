@@ -13,7 +13,7 @@ const Hero = () => {
     const slides = [
         {
             id: 1,
-            img: "https://images.unsplash.com/photo-1591886960571-74d43a9d4166?q=80&w=800&auto=format&fit=crop", 
+            img: "/img-3.webp", 
             topText: "Top Rated",
             bottomLabel: "Offer",
             bottomValue: "30% Off",
@@ -22,7 +22,7 @@ const Hero = () => {
         },
         {
             id: 2,
-            img: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=800&auto=format&fit=crop", 
+            img: "/img-2.webp", 
             topText: "Most Loved",
             bottomLabel: "Delivery",
             bottomValue: "Free Ship",
@@ -31,30 +31,30 @@ const Hero = () => {
         },
         {
             id: 3,
-            img: "https://plus.unsplash.com/premium_photo-1676272339523-54ed3e37cd5d?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
+            img: "/img-1.webp", 
             topText: "New Arrival",
             bottomLabel: "Price",
             bottomValue: "From $29",
             blobColor1: "#fef9c3", 
-            blobColor2: "#dcfce7"  
+            blobColor2: "#f0d8bb"  
         },
         {
             id: 4,
-            img: "https://plus.unsplash.com/premium_photo-1678115814193-f739500b50e7?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
+            img: "img-4.webp", 
             topText: "Best Scent",
             bottomLabel: "Exclusive",
             bottomValue: "Bundle",
             blobColor1: "#e0f2fe", 
-            blobColor2: "#ddd6fe"  
+            blobColor2: "#defffd"  
         },
         {
             id: 5,
-            img: "https://plus.unsplash.com/premium_photo-1676475964992-6404b8db0b53?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
+            img: "/img-5.webp", 
             topText: "Premium",
             bottomLabel: "Quality",
             bottomValue: "100% Fresh",
             blobColor1: "#f3e8ff", 
-            blobColor2: "#fce7f3"  
+            blobColor2: "#eeffe3"  
         }
     ];
 
