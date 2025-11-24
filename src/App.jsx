@@ -5,6 +5,8 @@ import Categories from './pages/Categories';
 import BestSelling from './pages/BestSelling';
 import Offer from './pages/Offer';
 import Testimonials from './pages/Testimonials';
+import Newsletter from './pages/Newsletter';
+import Footer from './pages/Footer';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
       <BestSelling />
       <Offer />
       <Testimonials />
+      <Newsletter />
+      <Footer />
     </div>
   );
 }
