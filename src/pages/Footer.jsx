@@ -28,16 +28,10 @@ const Footer = () => {
                                 <a 
                                     key={social} 
                                     href="#" 
-                                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-pink-500 hover:text-white transition-all duration-300 hover:-translate-y-1"
+                                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-pink-500 hover:text-white transition-all duration-300 hover:-translate-y-1 group"
                                 >
-                                    <img 
-                                        src={`https://cdn.simpleicons.org/${social}/white`} 
-                                        alt={social} 
-                                        className="w-4 h-4 filter invert opacity-80" 
-                                        onError={(e) => e.target.style.display = 'none'} // Fallback if image fails
-                                    />
-                                    {/* Fallback Icon SVG if needed */}
-                                    <span className="sr-only">{social}</span>
+                                    {/* Icon Placeholder (You can use FontAwesome or HeroIcons here) */}
+                                    <span className="capitalize text-[10px] font-bold">{social[0]}</span>
                                 </a>
                             ))}
                         </div>
@@ -64,7 +58,7 @@ const Footer = () => {
                         <ul className="space-y-4">
                             {['FAQ', 'Shipping Policy', 'Returns & Refunds', 'Privacy Policy', 'Terms of Service'].map((item) => (
                                 <li key={item}>
-                                    <a href="#" className="text-gray-400 hover:text-pink-500 transition-colors duration-200">
+                                    <a href="#" className="text-gray-400 hover:text-pink-500 transition-colors duration-200 hover:pl-1">
                                         {item}
                                     </a>
                                 </li>
@@ -76,18 +70,18 @@ const Footer = () => {
                     <div>
                         <h3 className="font-serif text-xl font-bold mb-6 text-pink-100">Get in Touch</h3>
                         <div className="space-y-6">
-                            <div className="flex items-start gap-4">
-                                <div className="bg-gray-800 p-3 rounded-full text-pink-500 shrink-0">
+                            <div className="flex items-start gap-4 group">
+                                <div className="bg-gray-800 p-3 rounded-full text-pink-500 shrink-0 group-hover:bg-pink-500 group-hover:text-white transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400 text-sm">123 Garden Street,</p>
-                                    <p className="text-gray-400 text-sm">Dhaka, Bangladesh</p>
+                                    <p className="text-gray-400 text-sm group-hover:text-gray-200 transition-colors">123 Garden Street,</p>
+                                    <p className="text-gray-400 text-sm group-hover:text-gray-200 transition-colors">Dhaka, Bangladesh</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                <div className="bg-gray-800 p-3 rounded-full text-pink-500 shrink-0">
+                            <div className="flex items-center gap-4 group">
+                                <div className="bg-gray-800 p-3 rounded-full text-pink-500 shrink-0 group-hover:bg-pink-500 group-hover:text-white transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                 </div>
                                 <a href="mailto:support@flowershop.com" className="text-gray-400 text-sm hover:text-white transition-colors">
@@ -95,8 +89,8 @@ const Footer = () => {
                                 </a>
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                <div className="bg-gray-800 p-3 rounded-full text-pink-500 shrink-0">
+                            <div className="flex items-center gap-4 group">
+                                <div className="bg-gray-800 p-3 rounded-full text-pink-500 shrink-0 group-hover:bg-pink-500 group-hover:text-white transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                 </div>
                                 <a href="tel:+880123456789" className="text-gray-400 text-sm hover:text-white transition-colors">
@@ -119,7 +113,7 @@ const Footer = () => {
                     {/* Payment Icons (Simulated) */}
                     <div className="flex gap-3">
                         {['Visa', 'Mastercard', 'PayPal', 'Bkash'].map((pay) => (
-                            <div key={pay} className="px-3 py-1 bg-white/5 border border-white/10 rounded text-[10px] text-gray-400 font-medium">
+                            <div key={pay} className="px-3 py-1 bg-white/5 border border-white/10 rounded cursor-pointer hover:bg-white/10 transition-colors text-[10px] text-gray-400 font-medium">
                                 {pay}
                             </div>
                         ))}
