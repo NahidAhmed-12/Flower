@@ -61,17 +61,14 @@ const Hero = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const swiperRef = useRef(null);
     
-    // --- NEW LOGIC START ---
-    const [showControls, setShowControls] = useState(true); // শুরুতে বাটন দেখাবে
-    const sliderContainerRef = useRef(null); // বাইরের ক্লিক ডিটেক্ট করার জন্য
+    const [showControls, setShowControls] = useState(true); 
+    const sliderContainerRef = useRef(null); 
 
     useEffect(() => {
-        // ১. ১৫ সেকেন্ড পর বাটন অটোমেটিক হাইড হবে
         const timer = setTimeout(() => {
             setShowControls(false);
         }, 15000);
 
-        // ২. স্লাইডারের বাইরে ক্লিক করলে বাটন হাইড হবে
         const handleClickOutside = (event) => {
             if (sliderContainerRef.current && !sliderContainerRef.current.contains(event.target)) {
                 setShowControls(false);
@@ -80,16 +77,18 @@ const Hero = () => {
 
         document.addEventListener('mousedown', handleClickOutside);
 
-        // ক্লিনআপ ফাংশন
         return () => {
             clearTimeout(timer);
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-    // --- NEW LOGIC END ---
 
     return (
-        <section className="relative min-h-screen flex items-center pt-24 pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0">
+        // --- পরিবর্তন ১: section এর স্টাইল ---
+        // আগে ছিল: min-h-screen flex items-center pt-24 pb-12
+        // পরিবর্তন: h-auto (কন্টেন্ট অনুযায়ী হাইট) এবং lg:h-screen (বড় স্ক্রিনে ফিক্সড হাইট)
+        // py-28 (উপরে নিচে ফিক্সড প্যাডিং ফোনের ডেস্কটপ মোডের জন্য)
+        <section className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:py-0 px-6 lg:px-12 overflow-hidden bg-white z-0">
             
             {/* --- DYNAMIC BACKGROUND BLOBS --- */}
             <div 
@@ -145,7 +144,7 @@ const Hero = () => {
                 <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full select-none">
                     
                     <div 
-                        ref={sliderContainerRef} // এখানে ref দেওয়া হয়েছে ক্লিক ডিটেক্ট করার জন্য
+                        ref={sliderContainerRef} 
                         className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform translate-z-0"
                     >
                         
@@ -178,15 +177,12 @@ const Hero = () => {
                         >
                             {slides.map((slide) => (
                                 <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem] bg-white">
-                                    {/* 
-                                        IMAGE FIX:
-                                        - h-auto এর বদলে h-[450px] (mobile) এবং md:h-[650px] (desktop) দেওয়া হয়েছে।
-                                        - object-cover ব্যবহার করা হয়েছে যাতে ছবি চ্যাপ্টা না হয়ে যায়।
-                                    */}
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
-                                        className="w-full h-[450px] md:h-[600px] lg:h-[650px] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110"
+                                        // --- পরিবর্তন ২: ইমেজের হাইট ---
+                                        // max-h-[80vh] যোগ করা হয়েছে যাতে ইমেজ অনেক বেশি লম্বা না হয়ে যায় ফোনের স্ক্রিনে
+                                        className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110"
                                     />
                                 </SwiperSlide>
                             ))}
@@ -195,10 +191,9 @@ const Hero = () => {
                         {/* --- DARK OVERLAY --- */}
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none rounded-[2.5rem]"></div>
 
-                        {/* --- ARROWS (Modified for 15s Auto Show + Hover) --- */}
+                        {/* --- ARROWS --- */}
                         <button 
                             onClick={() => swiperRef.current?.slidePrev()}
-                            // Logic: যদি showControls true হয়, তাহলে দেখাবে (opacity-100), নাহলে hover এ দেখাবে।
                             className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
                                 ? 'opacity-100 translate-x-0' 
