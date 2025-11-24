@@ -9,7 +9,7 @@ import 'swiper/css';
 import 'swiper/css/effect-creative';
 
 const Hero = () => {
-    // ১. স্লাইডার ডেটা (মোট ৫টি ইমেজ)
+    // ১. স্লাইডার ডেটা
     const slides = [
         {
             id: 1,
@@ -84,21 +84,16 @@ const Hero = () => {
     }, []);
 
     return (
-        // --- পরিবর্তন ১: Section এর স্টাইল ---
-        // আগে ছিল: lg:py-0 (যা ইমেজকে একদম টপে নিয়ে যাচ্ছিল)
-        // ফিক্স: lg:pt-32 (পিসির জন্য উপরে প্যাডিং দেওয়া হয়েছে যাতে ন্যাভবারের নিচে না যায়)
-        // এবং lg:items-center রাখা হয়েছে যাতে ভার্টিকালি দেখতে সুন্দর লাগে, কিন্তু প্যাডিং এর কারণে কন্টেন্ট নিচে থাকবে।
-        // Phone screen এর জন্য py-28 ঠিক রাখা হয়েছে।
         <section className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:pt-32 lg:pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0">
             
-            {/* --- DYNAMIC BACKGROUND BLOBS --- */}
+            {/* --- DYNAMIC BACKGROUND BLOBS (Optimized with will-change) --- */}
             <div 
-                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-300 ease-linear opacity-70"
+                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform]"
                 style={{ backgroundColor: slides[activeIndex].blobColor1 }}
             ></div>
             
             <div 
-                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-300 ease-linear opacity-70"
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform]"
                 style={{ 
                     backgroundColor: slides[activeIndex].blobColor2,
                     animationDelay: '2s' 
@@ -144,15 +139,20 @@ const Hero = () => {
                 {/* --- IMAGE SLIDER SECTION --- */}
                 <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full select-none">
                     
+                    {/* Added transform-gpu for hardware acceleration */}
                     <div 
                         ref={sliderContainerRef} 
-                        className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform translate-z-0"
+                        className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform-gpu translate-z-0"
                     >
                         
                         <Swiper
                             modules={[Autoplay, EffectCreative]}
                             effect={'creative'}
-                            speed={250} 
+                            speed={500} // Smoother speed (250ms is too fast causing jerkiness)
+                            observer={true} // Fixes initialization issues
+                            observeParents={true} // Fixes re-render issues
+                            watchSlidesProgress={true} // Essential for creative effect performance
+                            grabCursor={true}
                             creativeEffect={{
                                 prev: {
                                     shadow: true,
@@ -169,6 +169,7 @@ const Hero = () => {
                             autoplay={{
                                 delay: 3000, 
                                 disableOnInteraction: false,
+                                pauseOnMouseEnter: true // Prevents jitter while hovering
                             }}
                             onBeforeInit={(swiper) => {
                                 swiperRef.current = swiper;
@@ -178,10 +179,13 @@ const Hero = () => {
                         >
                             {slides.map((slide) => (
                                 <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem] bg-white">
+                                    {/* Optimized Image: loading="eager" and decoding="async" */}
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
-                                        className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110"
+                                        loading="eager"
+                                        decoding="async"
+                                        className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110 will-change-transform"
                                     />
                                 </SwiperSlide>
                             ))}
