@@ -3,6 +3,7 @@ import Hero from './pages/Hero';
 import Features from './pages/Features';
 import Categories from './pages/Categories';
 import BestSelling from './pages/BestSelling';
+import Offer from './pages/Offer';
 
 function App() {
   return (
