@@ -12,6 +12,15 @@ const Hero = () => {
     // ১. স্লাইডার ডেটা
     const slides = [
         {
+            id: 0,
+            img: "/Hero/img-0.avif", 
+            topText: "Top Sell",
+            bottomLabel: "Offer",
+            bottomValue: "10% Off",
+            blobColor1: "#e1f5f3", 
+            blobColor2: "#ffd5e5"  
+        },
+        {
             id: 1,
             img: "/Hero/img-3.webp", 
             topText: "Top Rated",
