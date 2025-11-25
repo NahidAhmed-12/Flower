@@ -70,7 +70,7 @@ const Hero = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const swiperRef = useRef(null);
     const heroSectionRef = useRef(null);
-    const autoplayResumeTimer = useRef(null); // ৫ সেকেন্ড টাইমারের জন্য Ref
+    const autoplayResumeTimer = useRef(null);
     
     const [showControls, setShowControls] = useState(true); 
     const sliderContainerRef = useRef(null); 
@@ -102,12 +102,9 @@ const Hero = () => {
                 const entry = entries[0];
                 if (swiperRef.current && swiperRef.current.autoplay) {
                     if (entry.isIntersecting) {
-                        // স্ক্রিনে আসলে চালু হবে
                         swiperRef.current.autoplay.start();
                     } else {
-                        // স্ক্রিনের বাইরে গেলে বন্ধ (Hang ফিক্স)
                         swiperRef.current.autoplay.stop();
-                        // টাইমার ক্লিয়ার করা হচ্ছে যাতে ব্যাকগ্রাউন্ডে চালু না হয়
                         if (autoplayResumeTimer.current) clearTimeout(autoplayResumeTimer.current);
                     }
                 }
@@ -128,23 +125,19 @@ const Hero = () => {
 
     // --- 5 Second Manual Interaction Logic ---
     const handleTouchStart = () => {
-        // ১. ইউজার হাত দিলে সাথে সাথে অটোপ্লে বন্ধ
         if (swiperRef.current && swiperRef.current.autoplay) {
             swiperRef.current.autoplay.stop();
         }
-        // ২. আগের কোনো টাইমার থাকলে ক্লিয়ার করা
         if (autoplayResumeTimer.current) {
             clearTimeout(autoplayResumeTimer.current);
         }
     };
 
     const handleTouchEnd = () => {
-        // ১. হাত সরানোর পর আগের টাইমার ক্লিয়ার (সেফটির জন্য)
         if (autoplayResumeTimer.current) {
             clearTimeout(autoplayResumeTimer.current);
         }
-
-        // ২. ৫ সেকেন্ড (5000ms) অপেক্ষা করে অটোপ্লে আবার চালু
+        // ৫ সেকেন্ড পর অটোপ্লে আবার চালু হবে
         autoplayResumeTimer.current = setTimeout(() => {
             if (swiperRef.current && swiperRef.current.autoplay) {
                 swiperRef.current.autoplay.start();
@@ -224,6 +217,9 @@ const Hero = () => {
                             observeParents={true} 
                             watchSlidesProgress={true} 
                             grabCursor={true}
+                            // --- FIX: প্রথমবার লোড হওয়ার ল্যাগ ফিক্স করার জন্য ---
+                            loop={true}
+                            loopAdditionalSlides={2} // এক্সট্রা স্লাইড রেডি রাখবে
                             creativeEffect={{
                                 prev: {
                                     shadow: true,
@@ -236,16 +232,14 @@ const Hero = () => {
                                     opacity: 0, 
                                 },
                             }}
-                            loop={true}
                             autoplay={{
                                 delay: 3000, 
-                                disableOnInteraction: false, // এটি false থাকবে যাতে আমরা ম্যানুয়ালি কন্ট্রোল করতে পারি
+                                disableOnInteraction: false,
                                 pauseOnMouseEnter: false
                             }}
-                            // --- NEW: Enhanced Manual Interaction Handling ---
-                            onTouchStart={handleTouchStart} // টাচ শুরু হলে অটোপ্লে বন্ধ
-                            onTouchEnd={handleTouchEnd}     // টাচ শেষ হলে ৫ সেকেন্ড পর চালু
-                            onSliderMove={handleTouchStart} // ড্র্যাগ করলে অটোপ্লে বন্ধ (সেফটি)
+                            onTouchStart={handleTouchStart} 
+                            onTouchEnd={handleTouchEnd}     
+                            onSliderMove={handleTouchStart} 
                             
                             onBeforeInit={(swiper) => {
                                 swiperRef.current = swiper;
@@ -253,12 +247,14 @@ const Hero = () => {
                             onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                             className="w-full h-full"
                         >
-                            {slides.map((slide) => (
+                            {slides.map((slide, index) => (
                                 <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem] bg-white">
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
                                         loading="eager"
+                                        // --- FIX: প্রথম ২টা ইমেজ হাই প্রায়োরিটিতে লোড হবে ---
+                                        fetchPriority={index < 2 ? "high" : "auto"}
                                         decoding="async"
                                         className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110 will-change-transform"
                                     />
@@ -272,9 +268,9 @@ const Hero = () => {
                         {/* --- ARROWS --- */}
                         <button 
                             onClick={() => {
-                                handleTouchStart(); // বাটন ক্লিক করলেও অটোপ্লে পজ হবে
+                                handleTouchStart();
                                 swiperRef.current?.slidePrev();
-                                handleTouchEnd(); // ৫ সেকেন্ড পর আবার চালু হবে
+                                handleTouchEnd();
                             }}
                             className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
