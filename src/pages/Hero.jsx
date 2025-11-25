@@ -69,7 +69,8 @@ const Hero = () => {
 
     const [activeIndex, setActiveIndex] = useState(0);
     const swiperRef = useRef(null);
-    const heroSectionRef = useRef(null); // পুরো সেকশন ট্র্যাক করার জন্য
+    const heroSectionRef = useRef(null);
+    const autoplayResumeTimer = useRef(null); // ৫ সেকেন্ড টাইমারের জন্য Ref
     
     const [showControls, setShowControls] = useState(true); 
     const sliderContainerRef = useRef(null); 
@@ -94,22 +95,24 @@ const Hero = () => {
         };
     }, []);
 
-    // --- NEW: Intersection Observer Logic (Fixes Hanging Issue) ---
+    // --- Intersection Observer Logic (Fixes Hanging Issue) ---
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
                 if (swiperRef.current && swiperRef.current.autoplay) {
                     if (entry.isIntersecting) {
-                        // সেকশন স্ক্রিনে আসলে অটোপ্লে চালু হবে
+                        // স্ক্রিনে আসলে চালু হবে
                         swiperRef.current.autoplay.start();
                     } else {
-                        // সেকশন স্ক্রিনের বাইরে গেলে অটোপ্লে বন্ধ হবে (মেমোরি বাঁচাবে এবং হ্যাং কমাবে)
+                        // স্ক্রিনের বাইরে গেলে বন্ধ (Hang ফিক্স)
                         swiperRef.current.autoplay.stop();
+                        // টাইমার ক্লিয়ার করা হচ্ছে যাতে ব্যাকগ্রাউন্ডে চালু না হয়
+                        if (autoplayResumeTimer.current) clearTimeout(autoplayResumeTimer.current);
                     }
                 }
             },
-            { threshold: 0.2 } // ২০% দেখা গেলেই কাজ করবে
+            { threshold: 0.2 }
         );
 
         if (heroSectionRef.current) {
@@ -122,6 +125,32 @@ const Hero = () => {
             }
         };
     }, []);
+
+    // --- 5 Second Manual Interaction Logic ---
+    const handleTouchStart = () => {
+        // ১. ইউজার হাত দিলে সাথে সাথে অটোপ্লে বন্ধ
+        if (swiperRef.current && swiperRef.current.autoplay) {
+            swiperRef.current.autoplay.stop();
+        }
+        // ২. আগের কোনো টাইমার থাকলে ক্লিয়ার করা
+        if (autoplayResumeTimer.current) {
+            clearTimeout(autoplayResumeTimer.current);
+        }
+    };
+
+    const handleTouchEnd = () => {
+        // ১. হাত সরানোর পর আগের টাইমার ক্লিয়ার (সেফটির জন্য)
+        if (autoplayResumeTimer.current) {
+            clearTimeout(autoplayResumeTimer.current);
+        }
+
+        // ২. ৫ সেকেন্ড (5000ms) অপেক্ষা করে অটোপ্লে আবার চালু
+        autoplayResumeTimer.current = setTimeout(() => {
+            if (swiperRef.current && swiperRef.current.autoplay) {
+                swiperRef.current.autoplay.start();
+            }
+        }, 5000); 
+    };
 
     return (
         <section 
@@ -210,22 +239,14 @@ const Hero = () => {
                             loop={true}
                             autoplay={{
                                 delay: 3000, 
-                                disableOnInteraction: false, // এটি ফলস রাখা দরকার যাতে পরে আবার চালু হতে পারে
-                                pauseOnMouseEnter: false // মাউস হোভারে পজ হবে না, টাচ ইভেন্ট দিয়ে হ্যান্ডেল করা হবে
+                                disableOnInteraction: false, // এটি false থাকবে যাতে আমরা ম্যানুয়ালি কন্ট্রোল করতে পারি
+                                pauseOnMouseEnter: false
                             }}
-                            // --- NEW: Manual Interaction Handling ---
-                            onTouchStart={() => {
-                                // যখন ইউজার হাত দেবে তখন অটো স্লাইড বন্ধ হবে
-                                if (swiperRef.current && swiperRef.current.autoplay) {
-                                    swiperRef.current.autoplay.stop();
-                                }
-                            }}
-                            onTouchEnd={() => {
-                                // যখন ইউজার হাত সরিয়ে নেবে তখন অটো স্লাইড আবার চালু হবে
-                                if (swiperRef.current && swiperRef.current.autoplay) {
-                                    swiperRef.current.autoplay.start();
-                                }
-                            }}
+                            // --- NEW: Enhanced Manual Interaction Handling ---
+                            onTouchStart={handleTouchStart} // টাচ শুরু হলে অটোপ্লে বন্ধ
+                            onTouchEnd={handleTouchEnd}     // টাচ শেষ হলে ৫ সেকেন্ড পর চালু
+                            onSliderMove={handleTouchStart} // ড্র্যাগ করলে অটোপ্লে বন্ধ (সেফটি)
+                            
                             onBeforeInit={(swiper) => {
                                 swiperRef.current = swiper;
                             }}
@@ -250,7 +271,11 @@ const Hero = () => {
 
                         {/* --- ARROWS --- */}
                         <button 
-                            onClick={() => swiperRef.current?.slidePrev()}
+                            onClick={() => {
+                                handleTouchStart(); // বাটন ক্লিক করলেও অটোপ্লে পজ হবে
+                                swiperRef.current?.slidePrev();
+                                handleTouchEnd(); // ৫ সেকেন্ড পর আবার চালু হবে
+                            }}
                             className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
                                 ? 'opacity-100 translate-x-0' 
@@ -261,7 +286,11 @@ const Hero = () => {
                         </button>
                         
                         <button 
-                            onClick={() => swiperRef.current?.slideNext()}
+                            onClick={() => {
+                                handleTouchStart();
+                                swiperRef.current?.slideNext();
+                                handleTouchEnd();
+                            }}
                             className={`absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
                                 ? 'opacity-100 translate-x-0' 
