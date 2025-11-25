@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 // Swiper ইম্পোর্ট
 import { Swiper, SwiperSlide } from 'swiper/react';
 // মডিউল
@@ -70,7 +70,8 @@ const Hero = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const swiperRef = useRef(null);
     const heroSectionRef = useRef(null);
-    const autoplayResumeTimer = useRef(null);
+    const autoplayTimerRef = useRef(null); // ৫ সেকেন্ড লজিকের জন্য টাইমার
+    const isInteracting = useRef(false); // ইউজার টাচ করছে কিনা চেক করার জন্য
     
     const [showControls, setShowControls] = useState(true); 
     const sliderContainerRef = useRef(null); 
@@ -88,28 +89,43 @@ const Hero = () => {
         };
 
         document.addEventListener('mousedown', handleClickOutside);
-
         return () => {
             clearTimeout(timer);
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
-    // --- Intersection Observer Logic (Fixes Hanging Issue) ---
+    // --- Start Autoplay Helper ---
+    const startAutoplay = useCallback(() => {
+        if (swiperRef.current && swiperRef.current.autoplay && !isInteracting.current) {
+            // চেক করা হচ্ছে স্লাইডারটি ভিউপোর্টে আছে কিনা এবং ইউজার টাচ করছে কিনা
+             swiperRef.current.autoplay.start();
+        }
+    }, []);
+
+    // --- Stop Autoplay Helper ---
+    const stopAutoplay = useCallback(() => {
+        if (swiperRef.current && swiperRef.current.autoplay) {
+            swiperRef.current.autoplay.stop();
+        }
+    }, []);
+
+    // --- Intersection Observer Logic (Scroll & Viewport Fix) ---
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
-                if (swiperRef.current && swiperRef.current.autoplay) {
-                    if (entry.isIntersecting) {
-                        swiperRef.current.autoplay.start();
-                    } else {
-                        swiperRef.current.autoplay.stop();
-                        if (autoplayResumeTimer.current) clearTimeout(autoplayResumeTimer.current);
-                    }
+                if (entry.isIntersecting) {
+                    // স্ক্রিনে আসলে চালু হবে
+                    startAutoplay();
+                } else {
+                    // স্ক্রিনের বাইরে গেলে পুরোপুরি বন্ধ (Hang Fix)
+                    stopAutoplay();
+                    // টাইমারও ক্লিয়ার করা হলো
+                    if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
                 }
             },
-            { threshold: 0.2 }
+            { threshold: 0.2 } // ২০% দেখা গেলেই কাজ করবে
         );
 
         if (heroSectionRef.current) {
@@ -121,28 +137,31 @@ const Hero = () => {
                 observer.unobserve(heroSectionRef.current);
             }
         };
-    }, []);
+    }, [startAutoplay, stopAutoplay]);
 
-    // --- 5 Second Manual Interaction Logic ---
-    const handleTouchStart = () => {
-        if (swiperRef.current && swiperRef.current.autoplay) {
-            swiperRef.current.autoplay.stop();
-        }
-        if (autoplayResumeTimer.current) {
-            clearTimeout(autoplayResumeTimer.current);
+
+    // --- 5 Second Manual Interaction Logic (Touch Fix) ---
+    const handleInteractionStart = () => {
+        isInteracting.current = true; // ফ্ল্যাগ সেট করা হলো
+        stopAutoplay(); // সাথে সাথে বন্ধ
+        
+        // যদি কোনো পেন্ডিং টাইমার থাকে সেটা ডিলিট করা
+        if (autoplayTimerRef.current) {
+            clearTimeout(autoplayTimerRef.current);
         }
     };
 
-    const handleTouchEnd = () => {
-        if (autoplayResumeTimer.current) {
-            clearTimeout(autoplayResumeTimer.current);
+    const handleInteractionEnd = () => {
+        isInteracting.current = false; // ফ্ল্যাগ রিমুভ
+
+        // ৫ সেকেন্ড অপেক্ষা করার লজিক
+        if (autoplayTimerRef.current) {
+            clearTimeout(autoplayTimerRef.current);
         }
-        // ৫ সেকেন্ড পর অটোপ্লে আবার চালু হবে
-        autoplayResumeTimer.current = setTimeout(() => {
-            if (swiperRef.current && swiperRef.current.autoplay) {
-                swiperRef.current.autoplay.start();
-            }
-        }, 5000); 
+        
+        autoplayTimerRef.current = setTimeout(() => {
+            startAutoplay(); // ৫ সেকেন্ড পর আবার চালু
+        }, 5000);
     };
 
     return (
@@ -153,12 +172,12 @@ const Hero = () => {
             
             {/* --- DYNAMIC BACKGROUND BLOBS --- */}
             <div 
-                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform]"
+                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform] transform-gpu"
                 style={{ backgroundColor: slides[activeIndex].blobColor1 }}
             ></div>
             
             <div 
-                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform]"
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform] transform-gpu"
                 style={{ 
                     backgroundColor: slides[activeIndex].blobColor2,
                     animationDelay: '2s' 
@@ -212,14 +231,20 @@ const Hero = () => {
                         <Swiper
                             modules={[Autoplay, EffectCreative]}
                             effect={'creative'}
-                            speed={600} 
+                            speed={700} // গতি সামান্য বাড়ানো হয়েছে স্মুথনেসের জন্য
                             observer={true} 
-                            observeParents={true} 
-                            watchSlidesProgress={true} 
+                            observeParents={true}
+                            
+                            // --- Performance Optimization Settings ---
+                            threshold={10} // ছোট খাটো টাচ ইগনোর করবে, ল্যাগ কমাবে
+                            longSwipesRatio={0.1}
+                            resistance={false}
+                            watchSlidesProgress={true}
+                            
                             grabCursor={true}
-                            // --- FIX: প্রথমবার লোড হওয়ার ল্যাগ ফিক্স করার জন্য ---
-                            loop={true}
-                            loopAdditionalSlides={2} // এক্সট্রা স্লাইড রেডি রাখবে
+                            loop={true} 
+                            // loopAdditionalSlides রিমুভ করা হয়েছে কারণ এটি মাঝে মাঝে কনফ্লিক্ট করে
+                            
                             creativeEffect={{
                                 prev: {
                                     shadow: true,
@@ -232,17 +257,30 @@ const Hero = () => {
                                     opacity: 0, 
                                 },
                             }}
+                            // Autoplay এখানে কনফিগার করা হয়েছে কিন্তু ডিফল্টভাবে false রাখা যেতে পারে
+                            // তবে আমরা disableOnInteraction: false রেখেছি এবং ম্যানুয়ালি কন্ট্রোল করছি
                             autoplay={{
                                 delay: 3000, 
-                                disableOnInteraction: false,
-                                pauseOnMouseEnter: false
+                                disableOnInteraction: false, 
+                                pauseOnMouseEnter: false,
+                                waitForTransition: true
                             }}
-                            onTouchStart={handleTouchStart} 
-                            onTouchEnd={handleTouchEnd}     
-                            onSliderMove={handleTouchStart} 
+
+                            // --- TOUCH EVENTS HANDLERS ---
+                            onTouchStart={handleInteractionStart}
+                            onTouchEnd={handleInteractionEnd}
+                            // স্লাইডার ড্র্যাগ করার সময়ও যাতে আটকায় না থাকে
+                            onSliderMove={handleInteractionStart}
                             
                             onBeforeInit={(swiper) => {
                                 swiperRef.current = swiper;
+                            }}
+                            // Initial Slide সেট হওয়ার পর অটোপ্লে নিশ্চিত করা
+                            onAfterInit={(swiper) => {
+                                // সামান্য দেরিতে অটোপ্লে চালু হবে যাতে রেন্ডারিং ইস্যু না হয়
+                                setTimeout(() => {
+                                    if(!isInteracting.current) swiper.autoplay.start();
+                                }, 500);
                             }}
                             onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                             className="w-full h-full"
@@ -252,10 +290,10 @@ const Hero = () => {
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
-                                        loading="eager"
-                                        // --- FIX: প্রথম ২টা ইমেজ হাই প্রায়োরিটিতে লোড হবে ---
-                                        fetchPriority={index < 2 ? "high" : "auto"}
-                                        decoding="async"
+                                        // প্রথম ইমেজ দ্রুত লোড হবে, বাকিগুলো অলসভাবে (Lag Fix)
+                                        loading={index === 0 ? "eager" : "lazy"}
+                                        fetchPriority={index === 0 ? "high" : "low"}
+                                        decoding={index === 0 ? "sync" : "async"}
                                         className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110 will-change-transform"
                                     />
                                 </SwiperSlide>
@@ -268,9 +306,9 @@ const Hero = () => {
                         {/* --- ARROWS --- */}
                         <button 
                             onClick={() => {
-                                handleTouchStart();
+                                handleInteractionStart();
                                 swiperRef.current?.slidePrev();
-                                handleTouchEnd();
+                                handleInteractionEnd();
                             }}
                             className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
@@ -283,9 +321,9 @@ const Hero = () => {
                         
                         <button 
                             onClick={() => {
-                                handleTouchStart();
+                                handleInteractionStart();
                                 swiperRef.current?.slideNext();
-                                handleTouchEnd();
+                                handleInteractionEnd();
                             }}
                             className={`absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
@@ -301,7 +339,11 @@ const Hero = () => {
                             {slides.map((_, index) => (
                                 <button
                                     key={index}
-                                    onClick={() => swiperRef.current?.slideToLoop(index)}
+                                    onClick={() => {
+                                        handleInteractionStart();
+                                        swiperRef.current?.slideToLoop(index);
+                                        handleInteractionEnd();
+                                    }}
                                     className={`h-2 rounded-full transition-all duration-200 hover:scale-125 ${
                                         activeIndex === index 
                                         ? 'w-6 bg-pink-500' 
