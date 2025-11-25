@@ -69,10 +69,12 @@ const Hero = () => {
 
     const [activeIndex, setActiveIndex] = useState(0);
     const swiperRef = useRef(null);
+    const heroSectionRef = useRef(null); // পুরো সেকশন ট্র্যাক করার জন্য
     
     const [showControls, setShowControls] = useState(true); 
     const sliderContainerRef = useRef(null); 
 
+    // --- Controls Hide Logic ---
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowControls(false);
@@ -92,10 +94,42 @@ const Hero = () => {
         };
     }, []);
 
+    // --- NEW: Intersection Observer Logic (Fixes Hanging Issue) ---
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0];
+                if (swiperRef.current && swiperRef.current.autoplay) {
+                    if (entry.isIntersecting) {
+                        // সেকশন স্ক্রিনে আসলে অটোপ্লে চালু হবে
+                        swiperRef.current.autoplay.start();
+                    } else {
+                        // সেকশন স্ক্রিনের বাইরে গেলে অটোপ্লে বন্ধ হবে (মেমোরি বাঁচাবে এবং হ্যাং কমাবে)
+                        swiperRef.current.autoplay.stop();
+                    }
+                }
+            },
+            { threshold: 0.2 } // ২০% দেখা গেলেই কাজ করবে
+        );
+
+        if (heroSectionRef.current) {
+            observer.observe(heroSectionRef.current);
+        }
+
+        return () => {
+            if (heroSectionRef.current) {
+                observer.unobserve(heroSectionRef.current);
+            }
+        };
+    }, []);
+
     return (
-        <section className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:pt-32 lg:pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0">
+        <section 
+            ref={heroSectionRef} 
+            className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:pt-32 lg:pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0"
+        >
             
-            {/* --- DYNAMIC BACKGROUND BLOBS (Optimized with will-change) --- */}
+            {/* --- DYNAMIC BACKGROUND BLOBS --- */}
             <div 
                 className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform]"
                 style={{ backgroundColor: slides[activeIndex].blobColor1 }}
@@ -148,7 +182,6 @@ const Hero = () => {
                 {/* --- IMAGE SLIDER SECTION --- */}
                 <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full select-none">
                     
-                    {/* Added transform-gpu for hardware acceleration */}
                     <div 
                         ref={sliderContainerRef} 
                         className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform-gpu translate-z-0"
@@ -157,10 +190,10 @@ const Hero = () => {
                         <Swiper
                             modules={[Autoplay, EffectCreative]}
                             effect={'creative'}
-                            speed={500} // Smoother speed (250ms is too fast causing jerkiness)
-                            observer={true} // Fixes initialization issues
-                            observeParents={true} // Fixes re-render issues
-                            watchSlidesProgress={true} // Essential for creative effect performance
+                            speed={600} 
+                            observer={true} 
+                            observeParents={true} 
+                            watchSlidesProgress={true} 
                             grabCursor={true}
                             creativeEffect={{
                                 prev: {
@@ -177,8 +210,21 @@ const Hero = () => {
                             loop={true}
                             autoplay={{
                                 delay: 3000, 
-                                disableOnInteraction: false,
-                                pauseOnMouseEnter: true // Prevents jitter while hovering
+                                disableOnInteraction: false, // এটি ফলস রাখা দরকার যাতে পরে আবার চালু হতে পারে
+                                pauseOnMouseEnter: false // মাউস হোভারে পজ হবে না, টাচ ইভেন্ট দিয়ে হ্যান্ডেল করা হবে
+                            }}
+                            // --- NEW: Manual Interaction Handling ---
+                            onTouchStart={() => {
+                                // যখন ইউজার হাত দেবে তখন অটো স্লাইড বন্ধ হবে
+                                if (swiperRef.current && swiperRef.current.autoplay) {
+                                    swiperRef.current.autoplay.stop();
+                                }
+                            }}
+                            onTouchEnd={() => {
+                                // যখন ইউজার হাত সরিয়ে নেবে তখন অটো স্লাইড আবার চালু হবে
+                                if (swiperRef.current && swiperRef.current.autoplay) {
+                                    swiperRef.current.autoplay.start();
+                                }
                             }}
                             onBeforeInit={(swiper) => {
                                 swiperRef.current = swiper;
@@ -188,7 +234,6 @@ const Hero = () => {
                         >
                             {slides.map((slide) => (
                                 <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem] bg-white">
-                                    {/* Optimized Image: loading="eager" and decoding="async" */}
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
