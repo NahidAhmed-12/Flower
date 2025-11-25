@@ -76,10 +76,12 @@ const BestSelling = () => {
                                     </div>
                                 )}
 
-                                {/* Main Image */}
+                                {/* Main Image - Lazy Load Added */}
                                 <img 
                                     src={product.img} 
-                                    alt={product.name} 
+                                    alt={product.name}
+                                    loading="lazy"      // স্ক্রল করলে লোড হবে
+                                    decoding="async"    // ব্রাউজারকে স্লো হতে দেবে না
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
 

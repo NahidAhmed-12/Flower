@@ -8,35 +8,35 @@ const Categories = () => {
             id: "01",
             name: "Romantic Love",
             price: "Start from $29",
-            image: "/Explore/img-1.webp", // Deep Red Roses
+            image: "/Explore/img-1.webp", 
             link: "Shop Collection"
         },
         {
             id: "02",
             name: "Wedding Elegance",
             price: "Start from $150",
-            image: "/Explore/img-2.webp", // White & Soft Pink
+            image: "/Explore/img-2.webp", 
             link: "Plan Wedding"
         },
         {
             id: "03",
             name: "Sympathy Lilies",
             price: "Start from $45",
-            image: "/Explore/img-3.webp", // Peaceful White
+            image: "/Explore/img-3.webp", 
             link: "Send Comfort"
         },
         {
             id: "04",
             name: "Luxury Decor",
             price: "Start from $60",
-            image: "/Explore/img-4.webp", // Artistic Vase
+            image: "/Explore/img-4.webp", 
             link: "View Decor"
         },
         {
             id: "05",
             name: "Spring Bundle",
             price: "Start from $35",
-            image: "/Explore/img-5.webp", // Colorful Tulips
+            image: "/Explore/img-5.webp", 
             link: "Shop Season"
         }
     ];
@@ -75,17 +75,19 @@ const Categories = () => {
                         </h2>
                     </div>
 
-                    {/* Navigation Buttons (Square & Minimal) */}
+                    {/* Navigation Buttons */}
                     <div className="flex gap-3">
                         <button 
                             onClick={() => scroll('left')}
                             className="w-12 h-12 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-900 hover:text-white transition-all duration-300"
+                            aria-label="Scroll Left"
                         >
                             <ArrowLeft />
                         </button>
                         <button 
                             onClick={() => scroll('right')}
                             className="w-12 h-12 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-900 hover:text-white transition-all duration-300"
+                            aria-label="Scroll Right"
                         >
                             <ArrowRight />
                         </button>
@@ -101,19 +103,26 @@ const Categories = () => {
                     {categories.map((cat) => (
                         <div 
                             key={cat.id} 
-                            className="min-w-[280px] md:min-w-[320px] h-[450px] relative group rounded-2xl overflow-hidden cursor-pointer"
+                            className="min-w-[280px] md:min-w-[320px] h-[450px] relative group rounded-2xl overflow-hidden cursor-pointer bg-gray-100"
                         >
-                            {/* Background Image */}
+                            {/* --- IMAGE OPTIMIZATION HERE --- */}
                             <img 
                                 src={cat.image} 
-                                alt={cat.name} 
+                                alt={cat.name}
+                                // Code Resizing: ব্রাউজারকে সাইজ বলে দেওয়া হলো
+                                width="320" 
+                                height="450"
+                                // Lazy Loading: স্ক্রিনে আসার পরেই লোড হবে
+                                loading="lazy"
+                                // Performance: অন্য কাজের পাশাপাশি ইমেজ ডিকোড করবে
+                                decoding="async"
                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
                             />
 
-                            {/* Dark Overlay (Gradient) */}
+                            {/* Dark Overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
 
-                            {/* Floating Glass Content */}
+                            {/* Content */}
                             <div className="absolute bottom-6 left-6 right-6">
                                 <div className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-xl transition-all duration-500 group-hover:bg-white/20 group-hover:translate-y-[-5px]">
                                     <h3 className="font-serif text-2xl text-white mb-1">
@@ -123,7 +132,6 @@ const Categories = () => {
                                         <p className="text-pink-200 text-sm font-medium">
                                             {cat.price}
                                         </p>
-                                        {/* Small Arrow Button inside card */}
                                         <span className="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center opacity-0 transform translate-x-[-10px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
                                             <ArrowRight />
                                         </span>
@@ -135,7 +143,6 @@ const Categories = () => {
                 </div>
             </div>
 
-            {/* Hide Scrollbar CSS */}
             <style>{`
                 .scrollbar-hide::-webkit-scrollbar {
                     display: none;
