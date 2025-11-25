@@ -70,8 +70,8 @@ const Hero = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const swiperRef = useRef(null);
     const heroSectionRef = useRef(null);
-    const autoplayTimerRef = useRef(null); // ৫ সেকেন্ড লজিকের জন্য টাইমার
-    const isInteracting = useRef(false); // ইউজার টাচ করছে কিনা চেক করার জন্য
+    const autoplayTimerRef = useRef(null);
+    const isInteracting = useRef(false);
     
     const [showControls, setShowControls] = useState(true); 
     const sliderContainerRef = useRef(null); 
@@ -98,7 +98,6 @@ const Hero = () => {
     // --- Start Autoplay Helper ---
     const startAutoplay = useCallback(() => {
         if (swiperRef.current && swiperRef.current.autoplay && !isInteracting.current) {
-            // চেক করা হচ্ছে স্লাইডারটি ভিউপোর্টে আছে কিনা এবং ইউজার টাচ করছে কিনা
              swiperRef.current.autoplay.start();
         }
     }, []);
@@ -110,22 +109,19 @@ const Hero = () => {
         }
     }, []);
 
-    // --- Intersection Observer Logic (Scroll & Viewport Fix) ---
+    // --- Intersection Observer Logic ---
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
                 if (entry.isIntersecting) {
-                    // স্ক্রিনে আসলে চালু হবে
                     startAutoplay();
                 } else {
-                    // স্ক্রিনের বাইরে গেলে পুরোপুরি বন্ধ (Hang Fix)
                     stopAutoplay();
-                    // টাইমারও ক্লিয়ার করা হলো
                     if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
                 }
             },
-            { threshold: 0.2 } // ২০% দেখা গেলেই কাজ করবে
+            { threshold: 0.2 }
         );
 
         if (heroSectionRef.current) {
@@ -140,27 +136,22 @@ const Hero = () => {
     }, [startAutoplay, stopAutoplay]);
 
 
-    // --- 5 Second Manual Interaction Logic (Touch Fix) ---
+    // --- Interaction Logic ---
     const handleInteractionStart = () => {
-        isInteracting.current = true; // ফ্ল্যাগ সেট করা হলো
-        stopAutoplay(); // সাথে সাথে বন্ধ
-        
-        // যদি কোনো পেন্ডিং টাইমার থাকে সেটা ডিলিট করা
+        isInteracting.current = true;
+        stopAutoplay();
         if (autoplayTimerRef.current) {
             clearTimeout(autoplayTimerRef.current);
         }
     };
 
     const handleInteractionEnd = () => {
-        isInteracting.current = false; // ফ্ল্যাগ রিমুভ
-
-        // ৫ সেকেন্ড অপেক্ষা করার লজিক
+        isInteracting.current = false;
         if (autoplayTimerRef.current) {
             clearTimeout(autoplayTimerRef.current);
         }
-        
         autoplayTimerRef.current = setTimeout(() => {
-            startAutoplay(); // ৫ সেকেন্ড পর আবার চালু
+            startAutoplay();
         }, 5000);
     };
 
@@ -231,20 +222,15 @@ const Hero = () => {
                         <Swiper
                             modules={[Autoplay, EffectCreative]}
                             effect={'creative'}
-                            speed={700} // গতি সামান্য বাড়ানো হয়েছে স্মুথনেসের জন্য
+                            speed={700}
                             observer={true} 
                             observeParents={true}
-                            
-                            // --- Performance Optimization Settings ---
-                            threshold={10} // ছোট খাটো টাচ ইগনোর করবে, ল্যাগ কমাবে
+                            threshold={10}
                             longSwipesRatio={0.1}
                             resistance={false}
                             watchSlidesProgress={true}
-                            
                             grabCursor={true}
                             loop={true} 
-                            // loopAdditionalSlides রিমুভ করা হয়েছে কারণ এটি মাঝে মাঝে কনফ্লিক্ট করে
-                            
                             creativeEffect={{
                                 prev: {
                                     shadow: true,
@@ -257,27 +243,19 @@ const Hero = () => {
                                     opacity: 0, 
                                 },
                             }}
-                            // Autoplay এখানে কনফিগার করা হয়েছে কিন্তু ডিফল্টভাবে false রাখা যেতে পারে
-                            // তবে আমরা disableOnInteraction: false রেখেছি এবং ম্যানুয়ালি কন্ট্রোল করছি
                             autoplay={{
                                 delay: 3000, 
                                 disableOnInteraction: false, 
                                 pauseOnMouseEnter: false,
                                 waitForTransition: true
                             }}
-
-                            // --- TOUCH EVENTS HANDLERS ---
                             onTouchStart={handleInteractionStart}
                             onTouchEnd={handleInteractionEnd}
-                            // স্লাইডার ড্র্যাগ করার সময়ও যাতে আটকায় না থাকে
                             onSliderMove={handleInteractionStart}
-                            
                             onBeforeInit={(swiper) => {
                                 swiperRef.current = swiper;
                             }}
-                            // Initial Slide সেট হওয়ার পর অটোপ্লে নিশ্চিত করা
                             onAfterInit={(swiper) => {
-                                // সামান্য দেরিতে অটোপ্লে চালু হবে যাতে রেন্ডারিং ইস্যু না হয়
                                 setTimeout(() => {
                                     if(!isInteracting.current) swiper.autoplay.start();
                                 }, 500);
@@ -287,13 +265,21 @@ const Hero = () => {
                         >
                             {slides.map((slide, index) => (
                                 <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem] bg-white">
+                                    {/* --- SMART IMAGE LOADING HERE --- */}
                                     <img 
                                         src={slide.img} 
                                         alt="Flower Bouquet" 
-                                        // প্রথম ইমেজ দ্রুত লোড হবে, বাকিগুলো অলসভাবে (Lag Fix)
+                                        
+                                        // 1. First image: Eager Load (Fast LCP)
+                                        // 2. Other images: Lazy Load (Performance)
                                         loading={index === 0 ? "eager" : "lazy"}
                                         fetchPriority={index === 0 ? "high" : "low"}
                                         decoding={index === 0 ? "sync" : "async"}
+                                        
+                                        // Layout Stability
+                                        width="600"
+                                        height="750"
+
                                         className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110 will-change-transform"
                                     />
                                 </SwiperSlide>
