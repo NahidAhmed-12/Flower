@@ -1,12 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-// Swiper ইম্পোর্ট
-import { Swiper, SwiperSlide } from 'swiper/react';
-// মডিউল
-import { Autoplay, EffectCreative } from 'swiper/modules';
-
-// Swiper CSS
-import 'swiper/css';
-import 'swiper/css/effect-creative';
+// Embla Carousel ইম্পোর্ট
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 
 const Hero = () => {
     // ১. স্লাইডার ডেটা
@@ -67,14 +62,35 @@ const Hero = () => {
         }
     ];
 
+    // --- Embla Setup ---
     const [activeIndex, setActiveIndex] = useState(0);
-    const swiperRef = useRef(null);
-    const heroSectionRef = useRef(null);
-    const autoplayTimerRef = useRef(null);
-    const isInteracting = useRef(false);
     
+    // Autoplay Plugin Configuration
+    const autoplay = useRef(
+        Autoplay({ delay: 3000, stopOnInteraction: false })
+    );
+
+    const [emblaRef, emblaApi] = useEmblaCarousel(
+        { loop: true, duration: 30 }, 
+        [autoplay.current]
+    );
+
+    const heroSectionRef = useRef(null);
     const [showControls, setShowControls] = useState(true); 
     const sliderContainerRef = useRef(null); 
+
+    // --- Update Index on Slide Change ---
+    const onSelect = useCallback(() => {
+        if (!emblaApi) return;
+        setActiveIndex(emblaApi.selectedScrollSnap());
+    }, [emblaApi]);
+
+    useEffect(() => {
+        if (!emblaApi) return;
+        emblaApi.on('select', onSelect);
+        return () => emblaApi.off('select', onSelect);
+    }, [emblaApi, onSelect]);
+
 
     // --- Controls Hide Logic ---
     useEffect(() => {
@@ -95,30 +111,16 @@ const Hero = () => {
         };
     }, []);
 
-    // --- Start Autoplay Helper ---
-    const startAutoplay = useCallback(() => {
-        if (swiperRef.current && swiperRef.current.autoplay && !isInteracting.current) {
-             swiperRef.current.autoplay.start();
-        }
-    }, []);
 
-    // --- Stop Autoplay Helper ---
-    const stopAutoplay = useCallback(() => {
-        if (swiperRef.current && swiperRef.current.autoplay) {
-            swiperRef.current.autoplay.stop();
-        }
-    }, []);
-
-    // --- Intersection Observer Logic ---
+    // --- Intersection Observer Logic (Pause when not visible) ---
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
                 if (entry.isIntersecting) {
-                    startAutoplay();
+                    autoplay.current.play();
                 } else {
-                    stopAutoplay();
-                    if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
+                    autoplay.current.stop();
                 }
             },
             { threshold: 0.2 }
@@ -133,27 +135,30 @@ const Hero = () => {
                 observer.unobserve(heroSectionRef.current);
             }
         };
-    }, [startAutoplay, stopAutoplay]);
+    }, []);
 
 
-    // --- Interaction Logic ---
-    const handleInteractionStart = () => {
-        isInteracting.current = true;
-        stopAutoplay();
-        if (autoplayTimerRef.current) {
-            clearTimeout(autoplayTimerRef.current);
+    // --- Navigation Handlers ---
+    const scrollPrev = useCallback(() => {
+        if (emblaApi) {
+            emblaApi.scrollPrev();
+            autoplay.current.reset(); 
         }
-    };
+    }, [emblaApi]);
 
-    const handleInteractionEnd = () => {
-        isInteracting.current = false;
-        if (autoplayTimerRef.current) {
-            clearTimeout(autoplayTimerRef.current);
+    const scrollNext = useCallback(() => {
+        if (emblaApi) {
+            emblaApi.scrollNext();
+            autoplay.current.reset();
         }
-        autoplayTimerRef.current = setTimeout(() => {
-            startAutoplay();
-        }, 5000);
-    };
+    }, [emblaApi]);
+
+    const scrollTo = useCallback((index) => {
+        if (emblaApi) {
+            emblaApi.scrollTo(index);
+            autoplay.current.reset();
+        }
+    }, [emblaApi]);
 
     return (
         <section 
@@ -219,83 +224,34 @@ const Hero = () => {
                         className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform-gpu translate-z-0"
                     >
                         
-                        <Swiper
-                            modules={[Autoplay, EffectCreative]}
-                            effect={'creative'}
-                            speed={700}
-                            observer={true} 
-                            observeParents={true}
-                            threshold={10}
-                            longSwipesRatio={0.1}
-                            resistance={false}
-                            watchSlidesProgress={true}
-                            grabCursor={true}
-                            loop={true} 
-                            creativeEffect={{
-                                prev: {
-                                    shadow: true,
-                                    translate: [0, 0, -100],
-                                    opacity: 0, 
-                                },
-                                next: {
-                                    translate: [0, 0, 0],
-                                    scale: 0.8, 
-                                    opacity: 0, 
-                                },
-                            }}
-                            autoplay={{
-                                delay: 3000, 
-                                disableOnInteraction: false, 
-                                pauseOnMouseEnter: false,
-                                waitForTransition: true
-                            }}
-                            onTouchStart={handleInteractionStart}
-                            onTouchEnd={handleInteractionEnd}
-                            onSliderMove={handleInteractionStart}
-                            onBeforeInit={(swiper) => {
-                                swiperRef.current = swiper;
-                            }}
-                            onAfterInit={(swiper) => {
-                                setTimeout(() => {
-                                    if(!isInteracting.current) swiper.autoplay.start();
-                                }, 500);
-                            }}
-                            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                            className="w-full h-full"
-                        >
-                            {slides.map((slide, index) => (
-                                <SwiperSlide key={slide.id} className="overflow-hidden rounded-[2.5rem] bg-white">
-                                    {/* --- SMART IMAGE LOADING HERE --- */}
-                                    <img 
-                                        src={slide.img} 
-                                        alt="Flower Bouquet" 
-                                        
-                                        // 1. First image: Eager Load (Fast LCP)
-                                        // 2. Other images: Lazy Load (Performance)
-                                        loading={index === 0 ? "eager" : "lazy"}
-                                        fetchPriority={index === 0 ? "high" : "low"}
-                                        decoding={index === 0 ? "sync" : "async"}
-                                        
-                                        // Layout Stability
-                                        width="600"
-                                        height="750"
-
-                                        className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110 will-change-transform"
-                                    />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
+                        {/* --- EMBLA CAROUSEL WRAPPER --- */}
+                        <div className="overflow-hidden h-full rounded-[2.5rem] backface-hidden" ref={emblaRef}>
+                            <div className="flex h-full touch-pan-y">
+                                {slides.map((slide, index) => (
+                                    <div key={slide.id} className="flex-[0_0_100%] min-w-0 relative h-full bg-white">
+                                        <img 
+                                            src={slide.img} 
+                                            alt="Flower Bouquet" 
+                                            loading={index === 0 ? "eager" : "lazy"}
+                                            fetchPriority={index === 0 ? "high" : "low"}
+                                            decoding={index === 0 ? "sync" : "async"}
+                                            width="600"
+                                            height="750"
+                                            // FIX: added 'group-active:scale-100' & 'group-active:duration-200'
+                                            // স্লাইড করার সময় (active) স্কেল নরমাল থাকবে
+                                            className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110 group-active:scale-100 group-active:duration-200 will-change-transform block"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
                         {/* --- DARK OVERLAY --- */}
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none rounded-[2.5rem]"></div>
 
                         {/* --- ARROWS --- */}
                         <button 
-                            onClick={() => {
-                                handleInteractionStart();
-                                swiperRef.current?.slidePrev();
-                                handleInteractionEnd();
-                            }}
+                            onClick={scrollPrev}
                             className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
                                 ? 'opacity-100 translate-x-0' 
@@ -306,11 +262,7 @@ const Hero = () => {
                         </button>
                         
                         <button 
-                            onClick={() => {
-                                handleInteractionStart();
-                                swiperRef.current?.slideNext();
-                                handleInteractionEnd();
-                            }}
+                            onClick={scrollNext}
                             className={`absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
                                 ? 'opacity-100 translate-x-0' 
@@ -325,11 +277,7 @@ const Hero = () => {
                             {slides.map((_, index) => (
                                 <button
                                     key={index}
-                                    onClick={() => {
-                                        handleInteractionStart();
-                                        swiperRef.current?.slideToLoop(index);
-                                        handleInteractionEnd();
-                                    }}
+                                    onClick={() => scrollTo(index)}
                                     className={`h-2 rounded-full transition-all duration-200 hover:scale-125 ${
                                         activeIndex === index 
                                         ? 'w-6 bg-pink-500' 

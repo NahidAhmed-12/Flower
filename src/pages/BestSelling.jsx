@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const BestSelling = () => {
     
@@ -41,6 +41,19 @@ const BestSelling = () => {
             tag: null
         }
     ];
+
+    // --- State Management ---
+    const [selectedImage, setSelectedImage] = useState(null); // বড় ছবির জন্য স্টেট
+    const [wishlist, setWishlist] = useState([]); // লাভ রিঅ্যাক্টের জন্য স্টেট
+
+    // লাভ বাটনে ক্লিক হ্যান্ডলার
+    const toggleWishlist = (id) => {
+        if (wishlist.includes(id)) {
+            setWishlist(wishlist.filter(item => item !== id));
+        } else {
+            setWishlist([...wishlist, id]);
+        }
+    };
 
     return (
         <section className="py-20 px-6 lg:px-12 bg-gray-50 relative overflow-hidden">
@@ -95,13 +108,27 @@ const BestSelling = () => {
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                                     </button>
                                     
-                                    {/* Wishlist */}
-                                    <button className="bg-white text-gray-900 p-3 rounded-full shadow-lg hover:bg-pink-500 hover:text-white transition-colors" title="Add to Wishlist">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                                    {/* Wishlist (Love Icon) - Updated Logic */}
+                                    <button 
+                                        onClick={() => toggleWishlist(product.id)}
+                                        className={`p-3 rounded-full shadow-lg transition-all duration-300 transform active:scale-90 ${
+                                            wishlist.includes(product.id) 
+                                            ? 'bg-pink-50 text-pink-600' 
+                                            : 'bg-white text-gray-900 hover:bg-pink-500 hover:text-white'
+                                        }`} 
+                                        title="Add to Wishlist"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill={wishlist.includes(product.id) ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
                                     </button>
 
-                                    {/* Quick View */}
-                                    <button className="bg-white text-gray-900 p-3 rounded-full shadow-lg hover:bg-pink-500 hover:text-white transition-colors" title="Quick View">
+                                    {/* Quick View (Eye Icon) - Updated Logic */}
+                                    <button 
+                                        onClick={() => setSelectedImage(product.img)}
+                                        className="bg-white text-gray-900 p-3 rounded-full shadow-lg hover:bg-pink-500 hover:text-white transition-colors" 
+                                        title="Quick View"
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                     </button>
                                 </div>
@@ -137,6 +164,36 @@ const BestSelling = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </button>
                 </div>
+
+                {/* --- Image Modal / Lightbox --- */}
+                {selectedImage && (
+                    <div 
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300"
+                        onClick={() => setSelectedImage(null)}
+                    >
+                        <div 
+                            className="relative max-w-4xl w-full h-auto bg-white rounded-2xl overflow-hidden shadow-2xl transform transition-all scale-100"
+                            onClick={(e) => e.stopPropagation()} // Stop clicking inside from closing
+                        >
+                            {/* Close Button */}
+                            <button 
+                                onClick={() => setSelectedImage(null)}
+                                className="absolute top-4 right-4 bg-white/80 text-gray-900 hover:bg-pink-500 hover:text-white p-2 rounded-full transition-colors z-10"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            
+                            {/* Large Image */}
+                            <img 
+                                src={selectedImage} 
+                                alt="Product Detail" 
+                                className="w-full h-auto max-h-[85vh] object-contain"
+                            />
+                        </div>
+                    </div>
+                )}
 
             </div>
         </section>
