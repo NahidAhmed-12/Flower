@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 const Hero = () => {
+    // ১. স্লাইডার ডেটা
     const slides = [
         {
             id: 0,
@@ -59,80 +60,125 @@ const Hero = () => {
     ];
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const sliderRef = useRef(null);
-    const autoplayRef = useRef(null);
+    const heroSectionRef = useRef(null);
+    const autoplayTimerRef = useRef(null);
+    const isInteracting = useRef(false);
+    
+    // Touch handling state
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
+    
+    const [showControls, setShowControls] = useState(true); 
+    const sliderContainerRef = useRef(null); 
 
-    // --- 1. Handle Scroll (Detect Active Slide) ---
-    const handleScroll = () => {
-        if (sliderRef.current) {
-            const scrollLeft = sliderRef.current.scrollLeft;
-            const width = sliderRef.current.clientWidth;
-            const newIndex = Math.round(scrollLeft / width);
-            if (newIndex !== activeIndex && newIndex < slides.length) {
-                setActiveIndex(newIndex);
-            }
-        }
-    };
-
-    // --- 2. Navigation Functions ---
-    const scrollToSlide = (index) => {
-        if (sliderRef.current) {
-            const width = sliderRef.current.clientWidth;
-            sliderRef.current.scrollTo({
-                left: width * index,
-                behavior: 'smooth'
-            });
-        }
-    };
-
-    const nextSlide = () => {
-        const nextIndex = activeIndex === slides.length - 1 ? 0 : activeIndex + 1;
-        scrollToSlide(nextIndex);
-    };
-
-    const prevSlide = () => {
-        const prevIndex = activeIndex === 0 ? slides.length - 1 : activeIndex - 1;
-        scrollToSlide(prevIndex);
-    };
-
-    // --- 3. Autoplay Logic ---
+    // --- Controls Hide Logic ---
     useEffect(() => {
-        // Clear existing timer
-        if (autoplayRef.current) clearInterval(autoplayRef.current);
+        const timer = setTimeout(() => {
+            setShowControls(false);
+        }, 15000);
+
+        const handleClickOutside = (event) => {
+            if (sliderContainerRef.current && !sliderContainerRef.current.contains(event.target)) {
+                setShowControls(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            clearTimeout(timer);
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // --- Slider Logic ---
+    const nextSlide = useCallback(() => {
+        setActiveIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, [slides.length]);
+
+    const prevSlide = useCallback(() => {
+        setActiveIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    }, [slides.length]);
+
+    const goToSlide = (index) => {
+        setActiveIndex(index);
+    };
+
+    // --- Autoplay Logic ---
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!isInteracting.current) {
+                nextSlide();
+            }
+        }, 3000); 
+
+        return () => clearInterval(interval);
+    }, [nextSlide]);
+
+
+    // --- Interaction Handlers ---
+    const handleInteractionStart = () => {
+        isInteracting.current = true;
+        if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
+    };
+
+    const handleInteractionEnd = () => {
+        if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
+        autoplayTimerRef.current = setTimeout(() => {
+            isInteracting.current = false;
+        }, 5000);
+    };
+
+    // --- Touch / Swipe Logic for Mobile ---
+    const onTouchStart = (e) => {
+        handleInteractionStart();
+        setTouchEnd(null);
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
         
-        // Set new timer
-        autoplayRef.current = setInterval(() => {
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+
+        if (isLeftSwipe) {
             nextSlide();
-        }, 3000);
-
-        return () => clearInterval(autoplayRef.current);
-    }, [activeIndex]); // Reset timer on interaction
-
-    // Pause Autoplay on Hover/Touch
-    const pauseAutoplay = () => clearInterval(autoplayRef.current);
-    const resumeAutoplay = () => {
-        clearInterval(autoplayRef.current);
-        autoplayRef.current = setInterval(nextSlide, 3000);
+        }
+        if (isRightSwipe) {
+            prevSlide();
+        }
+        handleInteractionEnd();
     };
 
     return (
-        <section className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:pt-32 lg:pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0">
+        <section 
+            ref={heroSectionRef} 
+            className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:pt-32 lg:pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0"
+        >
             
-            {/* --- BACKGROUND BLOBS (Reduced Blur for Performance) --- */}
+            {/* --- DYNAMIC BACKGROUND BLOBS --- */}
             <div 
-                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-[60px] opacity-60 transition-colors duration-1000 ease-linear -z-10 transform-gpu"
+                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform] transform-gpu"
                 style={{ backgroundColor: slides[activeIndex].blobColor1 }}
             ></div>
             
             <div 
-                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-[60px] opacity-60 transition-colors duration-1000 ease-linear -z-10 transform-gpu"
-                style={{ backgroundColor: slides[activeIndex].blobColor2 }}
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform] transform-gpu"
+                style={{ 
+                    backgroundColor: slides[activeIndex].blobColor2,
+                    animationDelay: '2s' 
+                }}
             ></div>
 
-            {/* Main Content */}
+            {/* Main Content Container */}
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center relative z-10">
                 
-                {/* --- LEFT TEXT --- */}
+                {/* --- LEFT TEXT CONTENT --- */}
                 <div className="text-center md:text-left order-2 md:order-1">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-pink-100 shadow-sm mb-6">
                         <span className="flex h-2 w-2 rounded-full bg-pink-500 animate-pulse"></span>
@@ -149,6 +195,7 @@ const Hero = () => {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                         <button className="bg-gray-900 text-white px-8 py-4 rounded-full font-medium shadow-xl shadow-gray-900/20 hover:bg-pink-500 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
                             <span>Shop Now</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                         </button>
                         <button className="group bg-white text-gray-800 border border-gray-200 px-8 py-4 rounded-full font-medium shadow-sm hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-pink-50 text-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -164,79 +211,96 @@ const Hero = () => {
                     </div>
                 </div>
                 
-                {/* --- NATIVE CSS SLIDER SECTION --- */}
+                {/* --- IMAGE SLIDER SECTION --- */}
                 <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full select-none">
                     
                     <div 
-                        className="group relative w-full max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 translate-z-0"
-                        onMouseEnter={pauseAutoplay}
-                        onMouseLeave={resumeAutoplay}
-                        onTouchStart={pauseAutoplay}
-                        onTouchEnd={resumeAutoplay}
+                        ref={sliderContainerRef} 
+                        // FIX: Added 'max-h-[80vh]' and fixed heights to control size on PC
+                        className="group relative w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform-gpu translate-z-0"
+                        // Touch Events
+                        onTouchStart={onTouchStart}
+                        onTouchMove={onTouchMove}
+                        onTouchEnd={onTouchEnd}
                     >
                         
-                        {/* --- SCROLL CONTAINER (The Magic Part) --- */}
-                        {/* 'snap-x', 'snap-mandatory', 'overflow-x-auto' - these do the heavy lifting */}
-                        <div 
-                            ref={sliderRef}
-                            onScroll={handleScroll}
-                            className="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
-                            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} 
-                        >
+                        {/* --- SLIDES --- */}
+                        <div className="relative w-full h-full">
                             {slides.map((slide, index) => (
                                 <div 
-                                    key={slide.id} 
-                                    className="min-w-full snap-center relative bg-white"
+                                    key={slide.id}
+                                    className={`absolute inset-0 w-full h-full transition-all duration-700 ease-in-out bg-white
+                                        ${index === activeIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-105'}
+                                    `}
                                 >
                                     <img 
                                         src={slide.img} 
-                                        alt="Flower Bouquet"
+                                        alt="Flower Bouquet" 
                                         loading={index === 0 ? "eager" : "lazy"}
-                                        decoding="async"
-                                        width="600"
-                                        height="750"
-                                        // Simple hover scale, no JS interaction
-                                        className="w-full h-[450px] md:h-[600px] lg:h-[650px] object-cover object-top transition-transform duration-700 ease-in-out lg:group-hover:scale-105 block"
+                                        // FIX: Added object-cover to fit within the fixed height container
+                                        className="w-full h-full object-cover object-top"
                                     />
-                                    
-                                    {/* Dark Overlay (CSS Only) */}
-                                    <div className="absolute inset-0 bg-black/10 opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                                 </div>
                             ))}
                         </div>
 
+                        {/* --- DARK OVERLAY (Hover Effect) --- */}
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none rounded-[2.5rem]"></div>
+
                         {/* --- ARROWS --- */}
                         <button 
-                            onClick={(e) => { e.stopPropagation(); prevSlide(); }}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40"
+                            onClick={() => {
+                                handleInteractionStart();
+                                prevSlide();
+                                handleInteractionEnd();
+                            }}
+                            className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
+                                showControls 
+                                ? 'opacity-100 translate-x-0' 
+                                : 'opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'
+                            }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                         </button>
                         
                         <button 
-                            onClick={(e) => { e.stopPropagation(); nextSlide(); }}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40"
+                            onClick={() => {
+                                handleInteractionStart();
+                                nextSlide();
+                                handleInteractionEnd();
+                            }}
+                            className={`absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
+                                showControls 
+                                ? 'opacity-100 translate-x-0' 
+                                : 'opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'
+                            }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                         </button>
 
-                        {/* --- DOTS --- */}
-                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-40">
+                        {/* --- DOTS (Small Navigation) --- */}
+                        {/* FIX: Ensure z-index is high (z-40) and positioned correctly at bottom */}
+                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-40 pointer-events-auto">
                             {slides.map((_, index) => (
                                 <button
                                     key={index}
-                                    onClick={(e) => { e.stopPropagation(); scrollToSlide(index); }}
+                                    onClick={() => {
+                                        handleInteractionStart();
+                                        goToSlide(index);
+                                        handleInteractionEnd();
+                                    }}
                                     className={`h-2 rounded-full transition-all duration-300 shadow-sm ${
                                         activeIndex === index 
-                                        ? 'w-6 bg-pink-500' 
-                                        : 'w-2 bg-white/70 hover:bg-pink-500'
+                                        ? 'w-8 bg-pink-500' 
+                                        : 'w-2 bg-white/80 hover:bg-pink-500 hover:w-4'
                                     }`}
+                                    aria-label={`Go to slide ${index + 1}`}
                                 ></button>
                             ))}
                         </div>
 
-                        {/* --- FLOATING CARDS (CSS Animation Only) --- */}
-                        <div className="absolute top-8 -left-4 bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-white/60 animate-float z-30 hidden md:block">
+                        {/* --- FLOATING CARDS (Top Left) --- */}
+                        <div className="absolute top-8 -left-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 animate-float z-30 transition-all duration-300 delay-100 group-hover:translate-x-2" style={{ animationDelay: '2s' }}>
                             <div className="flex items-center gap-3">
                                 <div className="flex -space-x-3">
                                     <img className="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="user"/>
@@ -244,22 +308,23 @@ const Hero = () => {
                                 </div>
                                 <div>
                                     <div className="flex text-yellow-400 text-[10px]">★★★★★</div>
-                                    <p className="text-[10px] font-bold text-gray-600">
+                                    <p className="text-[10px] font-bold text-gray-600 transition-all duration-200">
                                         {slides[activeIndex].topText}
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="absolute bottom-10 -right-4 md:right-[-10px] bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-white/60 flex items-center gap-3 animate-float z-30 hidden md:flex" style={{ animationDelay: '1s' }}>
+                        {/* --- FLOATING CARDS (Bottom Right) --- */}
+                        <div className="absolute bottom-10 -right-4 md:right-[-10px] bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 flex items-center gap-3 animate-float z-30 transition-all duration-300 group-hover:-translate-x-2" style={{ animationDelay: '1s' }}>
                             <div className="bg-pink-500 p-2 rounded-full text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
                             </div>
                             <div>
-                                <p className="text-[10px] text-gray-500 uppercase font-bold">
+                                <p className="text-[10px] text-gray-500 uppercase font-bold transition-all duration-200">
                                     {slides[activeIndex].bottomLabel}
                                 </p>
-                                <p className="text-base font-serif font-bold text-gray-900">
+                                <p className="text-base font-serif font-bold text-gray-900 transition-all duration-200">
                                     {slides[activeIndex].bottomValue}
                                 </p>
                             </div>
