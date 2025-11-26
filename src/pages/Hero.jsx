@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 const Hero = () => {
-    // ১. স্লাইডার ডেটা
+    // --- স্লাইডার ডেটা ---
     const slides = [
         {
             id: 0,
             img: "/Hero/img-0.avif", 
-            topText: "Top Sell",
-            bottomLabel: "Offer",
-            bottomValue: "10% Off",
+            topText: "Best Seller",
+            bottomLabel: "Collection",
+            bottomValue: "Spring Vibe",
             blobColor1: "#e1f5f3", 
             blobColor2: "#ffd5e5"  
         },
@@ -16,17 +16,17 @@ const Hero = () => {
             id: 1,
             img: "/Hero/img-3.webp", 
             topText: "Top Rated",
-            bottomLabel: "Offer",
-            bottomValue: "30% Off",
+            bottomLabel: "Exclusive",
+            bottomValue: "Royal Rose",
             blobColor1: "#fbcfe8", 
             blobColor2: "#e9d5ff"  
         },
         {
             id: 2,
             img: "/Hero/img-2.webp", 
-            topText: "Most Loved",
+            topText: "Customer Choice",
             bottomLabel: "Delivery",
-            bottomValue: "Free Ship",
+            bottomValue: "Express",
             blobColor1: "#fee2e2", 
             blobColor2: "#ffedd5"  
         },
@@ -34,17 +34,17 @@ const Hero = () => {
             id: 3,
             img: "/Hero/img-1.webp", 
             topText: "New Arrival",
-            bottomLabel: "Price",
-            bottomValue: "From $29",
+            bottomLabel: "Starting",
+            bottomValue: "$49.00",
             blobColor1: "#fef9c3", 
             blobColor2: "#f0d8bb"  
         },
         {
             id: 4,
             img: "/Hero/img-4.webp", 
-            topText: "Best Scent",
-            bottomLabel: "Exclusive",
-            bottomValue: "Bundle",
+            topText: "Aromatic",
+            bottomLabel: "Limited",
+            bottomValue: "Bundle Deal",
             blobColor1: "#e0f2fe", 
             blobColor2: "#fff1d9"  
         },
@@ -109,7 +109,7 @@ const Hero = () => {
             if (!isInteracting.current) {
                 nextSlide();
             }
-        }, 3000); 
+        }, 3500); 
 
         return () => clearInterval(interval);
     }, [nextSlide]);
@@ -128,7 +128,7 @@ const Hero = () => {
         }, 5000);
     };
 
-    // --- Touch / Swipe Logic for Mobile ---
+    // --- Touch / Swipe Logic ---
     const onTouchStart = (e) => {
         handleInteractionStart();
         setTouchEnd(null);
@@ -146,68 +146,106 @@ const Hero = () => {
         const isLeftSwipe = distance > 50;
         const isRightSwipe = distance < -50;
 
-        if (isLeftSwipe) {
-            nextSlide();
-        }
-        if (isRightSwipe) {
-            prevSlide();
-        }
+        if (isLeftSwipe) nextSlide();
+        if (isRightSwipe) prevSlide();
         handleInteractionEnd();
     };
 
     return (
         <section 
             ref={heroSectionRef} 
-            className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:pt-32 lg:pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0"
+            className="relative w-full min-h-screen flex items-center py-20 lg:py-28 px-6 lg:px-12 overflow-hidden bg-white z-0"
         >
             
-            {/* --- DYNAMIC BACKGROUND BLOBS --- */}
+            {/* --- WATERMARK TEXT --- */}
+            <div className="absolute top-20 left-0 lg:left-20 pointer-events-none select-none -z-10 opacity-[0.03]">
+                <h1 className="text-[15vw] leading-none font-black text-gray-900 tracking-tighter">
+                    BLOOM
+                </h1>
+            </div>
+
+            {/* --- BACKGROUND BLOBS --- */}
             <div 
-                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform] transform-gpu"
+                className="absolute top-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full mix-blend-multiply filter blur-[80px] -z-10 animate-float transition-colors duration-1000 ease-linear opacity-50"
                 style={{ backgroundColor: slides[activeIndex].blobColor1 }}
             ></div>
             
             <div 
-                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform] transform-gpu"
+                className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-[80px] -z-10 animate-float transition-colors duration-1000 ease-linear opacity-50"
                 style={{ 
                     backgroundColor: slides[activeIndex].blobColor2,
-                    animationDelay: '2s' 
+                    animationDelay: '3s' 
                 }}
             ></div>
 
             {/* Main Content Container */}
-            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-center relative z-10">
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center relative z-10">
                 
-                {/* --- LEFT TEXT CONTENT --- */}
-                <div className="text-center md:text-left order-2 md:order-1">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-pink-100 shadow-sm mb-6">
-                        <span className="flex h-2 w-2 rounded-full bg-pink-500 animate-pulse"></span>
-                        <span className="text-xs font-bold tracking-widest uppercase text-gray-500">New Collection</span>
-                    </div>
-                    <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold leading-[1.1] text-gray-900 mb-6">
-                        Let Beauty <br /> 
-                        <span className="text-pink-500 italic">Bloom Today.</span>
-                    </h1>
-                    <p className="text-gray-500 text-base md:text-lg mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed">
-                        Hand-crafted bouquets that speak the language of love. Delivered fresh from our garden to your special moments.
-                    </p>
+                {/* --- LEFT TEXT CONTENT (Design retained) --- */}
+                <div className="text-center md:text-left order-2 md:order-1 flex flex-col items-center md:items-start space-y-8">
                     
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                        <button className="bg-gray-900 text-white px-8 py-4 rounded-full font-medium shadow-xl shadow-gray-900/20 hover:bg-pink-500 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
-                            <span>Shop Now</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                    {/* Brand Tag Line */}
+                    <div className="flex items-center gap-3 animate-fade-in-up">
+                        <div className="h-[1px] w-12 bg-gray-400"></div>
+                        <span className="text-sm font-bold tracking-[0.3em] uppercase text-gray-500">Since 2024</span>
+                    </div>
+
+                    {/* Headline */}
+                    <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold leading-[1] text-gray-900 tracking-tight">
+                        Nature’s <br />
+                        <span className="font-serif italic font-light text-pink-500 block mt-2 relative z-10">
+                            Masterpiece
+                            <svg className="absolute -bottom-2 left-0 w-full h-3 text-pink-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" />
+                            </svg>
+                        </span>
+                    </h1>
+
+                    {/* Description */}
+                    <div className="border-l-4 border-pink-500/30 pl-6 text-left max-w-lg">
+                        <p className="text-gray-600 text-lg leading-relaxed font-light">
+                            Discover the art of gifting with our hand-picked floral arrangements. 
+                            Curated for elegance, delivered with <span className="font-medium text-gray-900">love & care.</span>
+                        </p>
+                    </div>
+                    
+                    {/* Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto pt-4">
+                        <button className="group relative px-8 py-4 rounded-full bg-gray-900 text-white font-medium overflow-hidden shadow-2xl shadow-gray-900/30 hover:shadow-pink-500/40 transition-all duration-300 hover:-translate-y-1">
+                            <span className="relative z-10 flex items-center justify-center gap-2">
+                                Shop Collection
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                            </span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </button>
-                        <button className="group bg-white text-gray-800 border border-gray-200 px-8 py-4 rounded-full font-medium shadow-sm hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-pink-50 text-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
-                            <span>Watch Story</span>
+                        
+                        <button className="group flex items-center justify-center gap-3 px-6 py-4 rounded-full text-gray-700 hover:text-pink-600 transition-colors font-medium">
+                            <span className="relative flex h-10 w-10">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-20"></span>
+                                <span className="relative inline-flex rounded-full h-10 w-10 bg-white border border-gray-200 items-center justify-center shadow-sm group-hover:border-pink-200 group-hover:scale-110 transition-transform">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </span>
+                            </span>
+                            <span className="underline decoration-transparent group-hover:decoration-pink-300 underline-offset-4 transition-all">How we work</span>
                         </button>
                     </div>
 
-                    <div className="mt-10 pt-8 border-t border-gray-200 flex items-center justify-center md:justify-start gap-8">
-                        <div><p className="text-2xl font-bold">15k+</p><p className="text-xs text-gray-500">Happy Users</p></div>
-                        <div><p className="text-2xl font-bold">4.9</p><p className="text-xs text-gray-500">Ratings</p></div>
+                    {/* Trusted Section */}
+                    <div className="flex items-center gap-4 pt-6">
+                        <div className="flex -space-x-3">
+                            <img className="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" />
+                            <img className="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" />
+                            <img className="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" />
+                            <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-900 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                                +2k
+                            </div>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-gray-900">Trusted by Clients</p>
+                            <div className="flex text-yellow-400 text-xs">
+                                ★★★★★ <span className="text-gray-400 ml-1 font-normal">(4.9/5)</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -216,9 +254,7 @@ const Hero = () => {
                     
                     <div 
                         ref={sliderContainerRef} 
-                        // FIX: Added 'max-h-[80vh]' and fixed heights to control size on PC
-                        className="group relative w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/20 cursor-grab active:cursor-grabbing transform-gpu translate-z-0"
-                        // Touch Events
+                        className="group relative w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/10 cursor-grab active:cursor-grabbing transform-gpu translate-z-0 bg-white"
                         onTouchStart={onTouchStart}
                         onTouchMove={onTouchMove}
                         onTouchEnd={onTouchEnd}
@@ -229,102 +265,88 @@ const Hero = () => {
                             {slides.map((slide, index) => (
                                 <div 
                                     key={slide.id}
-                                    className={`absolute inset-0 w-full h-full transition-all duration-700 ease-in-out bg-white
-                                        ${index === activeIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-105'}
+                                    className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-out bg-white
+                                        ${index === activeIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-110'}
                                     `}
                                 >
                                     <img 
                                         src={slide.img} 
-                                        alt="Flower Bouquet" 
+                                        alt="Premium Flower Bouquet" 
                                         loading={index === 0 ? "eager" : "lazy"}
-                                        // FIX: Added object-cover to fit within the fixed height container
-                                        className="w-full h-full object-cover object-top"
+                                        className="w-full h-full object-cover object-center"
                                     />
+                                    {/* Overlay for readability */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60"></div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* --- DARK OVERLAY (Hover Effect) --- */}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none rounded-[2.5rem]"></div>
-
                         {/* --- ARROWS --- */}
-                        <button 
-                            onClick={() => {
-                                handleInteractionStart();
-                                prevSlide();
-                                handleInteractionEnd();
-                            }}
-                            className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
-                                showControls 
-                                ? 'opacity-100 translate-x-0' 
-                                : 'opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'
-                            }`}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                        </button>
-                        
-                        <button 
-                            onClick={() => {
-                                handleInteractionStart();
-                                nextSlide();
-                                handleInteractionEnd();
-                            }}
-                            className={`absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
-                                showControls 
-                                ? 'opacity-100 translate-x-0' 
-                                : 'opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'
-                            }`}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                        </button>
+                        <div className={`absolute inset-0 flex items-center justify-between px-4 z-40 pointer-events-none transition-opacity duration-300 ${showControls ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                            <button 
+                                onClick={() => { handleInteractionStart(); prevSlide(); handleInteractionEnd(); }}
+                                className="pointer-events-auto w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white hover:text-gray-900 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            
+                            <button 
+                                onClick={() => { handleInteractionStart(); nextSlide(); handleInteractionEnd(); }}
+                                className="pointer-events-auto w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white hover:text-gray-900 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                            </button>
+                        </div>
 
-                        {/* --- DOTS (Small Navigation) --- */}
-                        {/* FIX: Ensure z-index is high (z-40) and positioned correctly at bottom */}
-                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-40 pointer-events-auto">
+                        {/* --- DOTS --- */}
+                        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-40 pointer-events-auto p-2 rounded-full bg-black/10 backdrop-blur-sm border border-white/10">
                             {slides.map((_, index) => (
                                 <button
                                     key={index}
-                                    onClick={() => {
-                                        handleInteractionStart();
-                                        goToSlide(index);
-                                        handleInteractionEnd();
-                                    }}
-                                    className={`h-2 rounded-full transition-all duration-300 shadow-sm ${
+                                    onClick={() => { handleInteractionStart(); goToSlide(index); handleInteractionEnd(); }}
+                                    className={`h-2 rounded-full transition-all duration-500 ease-out ${
                                         activeIndex === index 
-                                        ? 'w-8 bg-pink-500' 
-                                        : 'w-2 bg-white/80 hover:bg-pink-500 hover:w-4'
+                                        ? 'w-8 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]' 
+                                        : 'w-2 bg-white/40 hover:bg-white/80'
                                     }`}
-                                    aria-label={`Go to slide ${index + 1}`}
                                 ></button>
                             ))}
                         </div>
 
-                        {/* --- FLOATING CARDS (Top Left) --- */}
-                        <div className="absolute top-8 -left-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 animate-float z-30 transition-all duration-300 delay-100 group-hover:translate-x-2" style={{ animationDelay: '2s' }}>
+                        {/* --- FLOATING CARD: Top Left (Fixed Inside) --- */}
+                        <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-white/80 backdrop-blur-xl p-3 pr-5 rounded-2xl shadow-lg border border-white/50 animate-float z-30 transition-transform duration-500 hover:scale-105">
                             <div className="flex items-center gap-3">
-                                <div className="flex -space-x-3">
-                                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="user"/>
-                                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/65.jpg" alt="user"/>
+                                <div className="flex -space-x-2">
+                                    <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden">
+                                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="user" className="w-full h-full object-cover"/>
+                                    </div>
+                                    <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden flex items-center justify-center bg-pink-100 text-[10px] font-bold text-pink-600">
+                                        +99
+                                    </div>
                                 </div>
-                                <div>
-                                    <div className="flex text-yellow-400 text-[10px]">★★★★★</div>
-                                    <p className="text-[10px] font-bold text-gray-600 transition-all duration-200">
+                                <div className="flex flex-col">
+                                    <div className="flex text-yellow-400 text-xs tracking-tighter">★★★★★</div>
+                                    <span className="text-[10px] font-bold text-gray-800 uppercase tracking-wide mt-0.5">
                                         {slides[activeIndex].topText}
-                                    </p>
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* --- FLOATING CARDS (Bottom Right) --- */}
-                        <div className="absolute bottom-10 -right-4 md:right-[-10px] bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 flex items-center gap-3 animate-float z-30 transition-all duration-300 group-hover:-translate-x-2" style={{ animationDelay: '1s' }}>
-                            <div className="bg-pink-500 p-2 rounded-full text-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
+                        {/* --- FLOATING CARD: Bottom Right (FIXED POSITION) --- */}
+                        {/* পরিবর্তন: আগে এটি Negative (-right) ছিল, এখন এটি ভিতরে (right-4/8) আনা হয়েছে */}
+                        <div 
+                            className="absolute bottom-24 right-4 md:bottom-12 md:right-8 bg-white/90 backdrop-blur-xl p-4 pl-5 rounded-2xl shadow-xl border border-white/60 flex items-center gap-4 animate-float z-30 transition-transform duration-500 hover:-translate-y-1" 
+                            style={{ animationDelay: '1.5s' }}
+                        >
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 text-white flex items-center justify-center shadow-lg shadow-pink-500/30">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                             </div>
                             <div>
-                                <p className="text-[10px] text-gray-500 uppercase font-bold transition-all duration-200">
+                                <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">
                                     {slides[activeIndex].bottomLabel}
                                 </p>
-                                <p className="text-base font-serif font-bold text-gray-900 transition-all duration-200">
+                                <p className="text-xl font-serif font-bold text-gray-900">
                                     {slides[activeIndex].bottomValue}
                                 </p>
                             </div>
