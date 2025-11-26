@@ -154,11 +154,12 @@ const Hero = () => {
     return (
         <section 
             ref={heroSectionRef} 
-            className="relative w-full min-h-screen flex items-center py-20 lg:py-28 px-6 lg:px-12 overflow-hidden bg-white z-0"
+            // UPDATE: Added 'select-none' here to prevent text selection
+            className="relative w-full min-h-screen flex items-center py-20 lg:py-28 px-6 lg:px-12 overflow-hidden bg-white z-0 select-none"
         >
             
             {/* --- WATERMARK TEXT --- */}
-            <div className="absolute top-20 left-0 lg:left-20 pointer-events-none select-none -z-10 opacity-[0.03]">
+            <div className="absolute top-20 left-0 lg:left-20 pointer-events-none -z-10 opacity-[0.03]">
                 <h1 className="text-[15vw] leading-none font-black text-gray-900 tracking-tighter">
                     BLOOM
                 </h1>
@@ -181,7 +182,7 @@ const Hero = () => {
             {/* Main Content Container */}
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center relative z-10">
                 
-                {/* --- LEFT TEXT CONTENT (Design retained) --- */}
+                {/* --- LEFT TEXT CONTENT --- */}
                 <div className="text-center md:text-left order-2 md:order-1 flex flex-col items-center md:items-start space-y-8">
                     
                     {/* Brand Tag Line */}
@@ -250,7 +251,7 @@ const Hero = () => {
                 </div>
                 
                 {/* --- IMAGE SLIDER SECTION --- */}
-                <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full select-none">
+                <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full">
                     
                     <div 
                         ref={sliderContainerRef} 
@@ -265,18 +266,19 @@ const Hero = () => {
                             {slides.map((slide, index) => (
                                 <div 
                                     key={slide.id}
-                                    className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-out bg-white
+                                    className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-out bg-white overflow-hidden
                                         ${index === activeIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-110'}
                                     `}
                                 >
+                                    {/* UPDATE: Added hover:scale-110 and transition for hover zoom effect */}
                                     <img 
                                         src={slide.img} 
                                         alt="Premium Flower Bouquet" 
                                         loading={index === 0 ? "eager" : "lazy"}
-                                        className="w-full h-full object-cover object-center"
+                                        className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out hover:scale-110"
                                     />
-                                    {/* Overlay for readability */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60"></div>
+                                    
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60 pointer-events-none"></div>
                                 </div>
                             ))}
                         </div>
@@ -313,8 +315,8 @@ const Hero = () => {
                             ))}
                         </div>
 
-                        {/* --- FLOATING CARD: Top Left (Fixed Inside) --- */}
-                        <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-white/80 backdrop-blur-xl p-3 pr-5 rounded-2xl shadow-lg border border-white/50 animate-float z-30 transition-transform duration-500 hover:scale-105">
+                        {/* --- FLOATING CARD: Top Left --- */}
+                        <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-white/80 backdrop-blur-xl p-3 pr-5 rounded-2xl shadow-lg border border-white/50 animate-float z-30 transition-transform duration-500 hover:scale-105 pointer-events-none md:pointer-events-auto">
                             <div className="flex items-center gap-3">
                                 <div className="flex -space-x-2">
                                     <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden">
@@ -333,10 +335,9 @@ const Hero = () => {
                             </div>
                         </div>
 
-                        {/* --- FLOATING CARD: Bottom Right (FIXED POSITION) --- */}
-                        {/* পরিবর্তন: আগে এটি Negative (-right) ছিল, এখন এটি ভিতরে (right-4/8) আনা হয়েছে */}
+                        {/* --- FLOATING CARD: Bottom Right (Hidden on Mobile) --- */}
                         <div 
-                            className="absolute bottom-24 right-4 md:bottom-12 md:right-8 bg-white/90 backdrop-blur-xl p-4 pl-5 rounded-2xl shadow-xl border border-white/60 flex items-center gap-4 animate-float z-30 transition-transform duration-500 hover:-translate-y-1" 
+                            className="hidden md:flex absolute bottom-12 right-8 bg-white/90 backdrop-blur-xl p-4 pl-5 rounded-2xl shadow-xl border border-white/60 items-center gap-4 animate-float z-30 transition-transform duration-500 hover:-translate-y-1 pointer-events-none md:pointer-events-auto" 
                             style={{ animationDelay: '1.5s' }}
                         >
                             <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 text-white flex items-center justify-center shadow-lg shadow-pink-500/30">
