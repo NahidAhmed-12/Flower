@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-// Embla Carousel ইম্পোর্ট
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 
@@ -71,7 +70,7 @@ const Hero = () => {
     );
 
     const [emblaRef, emblaApi] = useEmblaCarousel(
-        { loop: true, duration: 30 }, 
+        { loop: true, duration: 25 }, 
         [autoplay.current]
     );
 
@@ -90,7 +89,6 @@ const Hero = () => {
         emblaApi.on('select', onSelect);
         return () => emblaApi.off('select', onSelect);
     }, [emblaApi, onSelect]);
-
 
     // --- Controls Hide Logic ---
     useEffect(() => {
@@ -111,8 +109,7 @@ const Hero = () => {
         };
     }, []);
 
-
-    // --- Intersection Observer Logic (Pause when not visible) ---
+    // --- Intersection Observer Logic ---
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -123,7 +120,7 @@ const Hero = () => {
                     autoplay.current.stop();
                 }
             },
-            { threshold: 0.2 }
+            { threshold: 0.1 } // Reduced threshold for mobile
         );
 
         if (heroSectionRef.current) {
@@ -136,7 +133,6 @@ const Hero = () => {
             }
         };
     }, []);
-
 
     // --- Navigation Handlers ---
     const scrollPrev = useCallback(() => {
@@ -166,14 +162,14 @@ const Hero = () => {
             className="relative w-full h-auto lg:h-screen flex items-center py-28 lg:pt-32 lg:pb-12 px-6 lg:px-12 overflow-hidden bg-white z-0"
         >
             
-            {/* --- DYNAMIC BACKGROUND BLOBS --- */}
+            {/* --- DYNAMIC BACKGROUND BLOBS (Hardware Accelerated) --- */}
             <div 
-                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform] transform-gpu"
+                className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 transform-gpu will-change-[background-color]"
                 style={{ backgroundColor: slides[activeIndex].blobColor1 }}
             ></div>
             
             <div 
-                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 will-change-[background-color,transform] transform-gpu"
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full mix-blend-multiply filter blur-3xl -z-10 animate-float transition-colors duration-500 ease-linear opacity-70 transform-gpu will-change-[background-color]"
                 style={{ 
                     backgroundColor: slides[activeIndex].blobColor2,
                     animationDelay: '2s' 
@@ -228,34 +224,38 @@ const Hero = () => {
                         <div className="overflow-hidden h-full rounded-[2.5rem] backface-hidden" ref={emblaRef}>
                             <div className="flex h-full touch-pan-y">
                                 {slides.map((slide, index) => (
-                                    <div key={slide.id} className="flex-[0_0_100%] min-w-0 relative h-full bg-white">
+                                    <div key={slide.id} className="flex-[0_0_100%] min-w-0 relative h-full bg-white" style={{ transform: 'translate3d(0,0,0)' }}>
                                         <img 
                                             src={slide.img} 
                                             alt="Flower Bouquet" 
+                                            
+                                            // Performance Optimization Attributes
                                             loading={index === 0 ? "eager" : "lazy"}
                                             fetchPriority={index === 0 ? "high" : "low"}
-                                            decoding={index === 0 ? "sync" : "async"}
+                                            decoding="async" 
+                                            
                                             width="600"
                                             height="750"
-                                            // FIX: added 'group-active:scale-100' & 'group-active:duration-200'
-                                            // স্লাইড করার সময় (active) স্কেল নরমাল থাকবে
-                                            className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-110 group-active:scale-100 group-active:duration-200 will-change-transform block"
+                                            
+                                            // FIX: Removed zoom effect on mobile/touch (lg:group-hover only)
+                                            // Added 'transform-gpu' for smoother rendering
+                                            className="w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] object-cover object-top transition-transform duration-700 ease-in-out lg:group-hover:scale-110 will-change-transform transform-gpu block"
                                         />
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        {/* --- DARK OVERLAY --- */}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none rounded-[2.5rem]"></div>
+                        {/* --- DARK OVERLAY (Simplified for performance) --- */}
+                        <div className="absolute inset-0 bg-black/20 opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none rounded-[2.5rem]"></div>
 
                         {/* --- ARROWS --- */}
                         <button 
                             onClick={scrollPrev}
-                            className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
+                            className={`absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
                                 ? 'opacity-100 translate-x-0' 
-                                : 'opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'
+                                : 'opacity-0 -translate-x-4 lg:group-hover:opacity-100 lg:group-hover:translate-x-0'
                             }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
@@ -263,10 +263,10 @@ const Hero = () => {
                         
                         <button 
                             onClick={scrollNext}
-                            className={`absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
+                            className={`absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white text-white hover:text-gray-900 p-3 rounded-full transition-all duration-300 z-40 cursor-pointer ${
                                 showControls 
                                 ? 'opacity-100 translate-x-0' 
-                                : 'opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'
+                                : 'opacity-0 translate-x-4 lg:group-hover:opacity-100 lg:group-hover:translate-x-0'
                             }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
@@ -278,17 +278,17 @@ const Hero = () => {
                                 <button
                                     key={index}
                                     onClick={() => scrollTo(index)}
-                                    className={`h-2 rounded-full transition-all duration-200 hover:scale-125 ${
+                                    className={`h-2 rounded-full transition-all duration-200 lg:hover:scale-125 ${
                                         activeIndex === index 
                                         ? 'w-6 bg-pink-500' 
-                                        : 'w-2 bg-white/50 hover:bg-pink-500'
+                                        : 'w-2 bg-white/50 lg:hover:bg-pink-500'
                                     }`}
                                 ></button>
                             ))}
                         </div>
 
                         {/* --- FLOATING CARDS (Top Left) --- */}
-                        <div className="absolute top-8 -left-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 animate-float z-30 transition-all duration-300 delay-100 group-hover:translate-x-2" style={{ animationDelay: '2s' }}>
+                        <div className="absolute top-8 -left-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 animate-float z-30 transition-all duration-300 delay-100 lg:group-hover:translate-x-2" style={{ animationDelay: '2s' }}>
                             <div className="flex items-center gap-3">
                                 <div className="flex -space-x-3">
                                     <img className="w-8 h-8 rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/44.jpg" alt="user"/>
@@ -304,7 +304,7 @@ const Hero = () => {
                         </div>
 
                         {/* --- FLOATING CARDS (Bottom Right) --- */}
-                        <div className="absolute bottom-10 -right-4 md:right-[-10px] bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 flex items-center gap-3 animate-float z-30 transition-all duration-300 group-hover:-translate-x-2" style={{ animationDelay: '1s' }}>
+                        <div className="absolute bottom-10 -right-4 md:right-[-10px] bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/60 flex items-center gap-3 animate-float z-30 transition-all duration-300 lg:group-hover:-translate-x-2" style={{ animationDelay: '1s' }}>
                             <div className="bg-pink-500 p-2 rounded-full text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
                             </div>
