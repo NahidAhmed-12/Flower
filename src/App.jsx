@@ -3,7 +3,7 @@ import Hero from './pages/Hero';
 import Features from './pages/Features';
 import Categories from './pages/Categories';
 import BestSelling from './pages/BestSelling';
-import Offer from './pages/Offer';
+
 import Testimonials from './pages/Testimonials';
 import Newsletter from './pages/Newsletter';
 import Footer from './pages/Footer';
@@ -16,7 +16,7 @@ function App() {
       <Features />
       <Categories />
       <BestSelling />
-      <Offer />
+ 
       <Testimonials />
       <Newsletter />
       <Footer />
