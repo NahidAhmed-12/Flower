@@ -70,14 +70,11 @@ const Categories = () => {
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-rose-100/40 dark:bg-rose-900/10 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
             
             <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-                
-                {/* --- HEADER --- */}
-                {/* items-end ছিল, সেটা বদলে items-center md:items-end করা হয়েছে যাতে মোবাইলে সেন্টারে থাকে */}
-                <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-14 gap-8">
+                 <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-14 gap-8">
                     
-                    {/* text-center md:text-left যোগ করা হয়েছে */}
+                   
                     <div className="max-w-xl text-center md:text-left">
-                        {/* justify-center md:justify-start যোগ করা হয়েছে */}
+                      
                         <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
                             <span className="w-10 h-[1px] bg-rose-500"></span>
                             <p className="text-rose-600 dark:text-rose-400 font-semibold tracking-widest text-xs uppercase">

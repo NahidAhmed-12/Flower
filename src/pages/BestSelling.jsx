@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom'; // ১. এটি ইমপোর্ট করতে হবে
+import { createPortal } from 'react-dom'; 
 
 const BestSelling = () => {
     
-    // ডামি প্রোডাক্ট ডেটা
+   
     const products = [
         {
             id: 1,
@@ -159,10 +159,7 @@ const BestSelling = () => {
                     </button>
                 </div>
 
-                {/* 
-                   --- Image Modal with React Portal --- 
-                   এটি এখন 'body' তে রেন্ডার হবে, তাই নেভবারের উপরে আসবেই।
-                */}
+                
                 {selectedImage && createPortal(
                     <div 
                         className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 transition-all duration-300"
@@ -188,7 +185,7 @@ const BestSelling = () => {
                             />
                         </div>
                     </div>,
-                    document.body // <-- এই অংশটি ম্যাজিকের মতো কাজ করবে
+                    document.body
                 )}
 
             </div>

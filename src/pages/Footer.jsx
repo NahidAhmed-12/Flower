@@ -3,8 +3,7 @@ import React from 'react';
 const Footer = () => {
     return (
         <footer className="bg-[#FFFBF7] dark:bg-[#050505] text-gray-900 dark:text-white pt-20 pb-10 relative overflow-hidden font-sans border-t border-gray-100 dark:border-gray-900 transition-colors duration-300">
-            
-            {/* --- Background Decorative Blobs --- */}
+              {/* --- Background Decorative Blobs --- */}
             <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-pink-400/5 dark:bg-pink-900/10 rounded-full blur-[100px] pointer-events-none"></div>
             <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-400/5 dark:bg-purple-900/10 rounded-full blur-[100px] pointer-events-none"></div>
 

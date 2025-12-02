@@ -39,7 +39,7 @@ const Features = () => {
     return (
         <section className="py-20 lg:py-28 px-6 bg-[#FFF0F5] dark:bg-[#0f0f0f] relative overflow-hidden transition-colors duration-300">
             
-            {/* Soft Background Glows (Pink/Purple Theme matching Hero) */}
+           
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-pink-400/5 dark:bg-pink-500/5 rounded-full blur-[100px] pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/5 dark:bg-purple-500/5 rounded-full blur-[80px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
 

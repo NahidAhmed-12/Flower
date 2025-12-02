@@ -29,7 +29,7 @@ const Testimonials = () => {
         }
     ];
 
-    // স্টার রেন্ডার করার ফাংশন
+   
     const renderStars = (rating) => {
         return [...Array(5)].map((_, index) => (
             <svg 

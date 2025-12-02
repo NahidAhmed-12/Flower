@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
-  // Theme State
+
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
   // Search States
@@ -30,7 +30,7 @@ const Navbar = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  // --- Prevent Scrolling when Mobile Menu is Open ---
+  
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -39,7 +39,7 @@ const Navbar = () => {
     }
   }, [isMenuOpen]);
 
-  // --- Search & Click Outside Logic ---
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isSearchOpen && searchRef.current && !searchRef.current.contains(event.target)) {
@@ -75,25 +75,16 @@ const Navbar = () => {
 
   return (
     <>
-      {/* 
-         Change 1: `pt-0 px-0` for mobile (no gap), 
-         `md:pt-4 md:px-6` for desktop (gap included) 
-      */}
+     
       <nav className="fixed w-full top-0 z-50 transition-all duration-300 pt-0 px-0 md:pt-4 md:px-6">
         
-        {/* 
-           Change 2: `rounded-none` for mobile (rectangular), 
-           `md:rounded-2xl` for desktop (rounded corners)
-           `border-b` for mobile specific styling, `md:border` for full border on desktop
-        */}
+        
         <div className="max-w-7xl mx-auto bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-lg border-b md:border border-gray-200 dark:border-gray-800 rounded-none md:rounded-2xl shadow-sm px-6 py-3 flex justify-between items-center relative z-50">
           
-          {/* =======================
-              SEARCH BAR OVERLAY
-             ======================= */}
+         
           <div 
             ref={searchRef}
-            // Change 3: Also apply rounded-none for mobile, rounded-2xl for desktop
+           
             className={`absolute inset-0 bg-white dark:bg-[#1a1a1a] rounded-none md:rounded-2xl z-[60] flex items-center justify-between px-6 transition-all duration-500 ease-in-out ${
               isSearchOpen ? 'w-full opacity-100 visible' : 'w-0 opacity-0 invisible overflow-hidden'
             }`}
@@ -128,9 +119,6 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* =======================
-              LOGO SECTION
-             ======================= */}
           <a href="#" className="flex items-center gap-2 group z-50">
             <div className="flex flex-col leading-none">
               <h1 className="text-2xl font-serif font-bold text-gray-900 dark:text-white tracking-tight group-hover:text-orange-600 transition-colors duration-300">
@@ -195,9 +183,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* =======================
-          MOBILE FULL SCREEN MENU
-         ======================= */}
+     
       <div 
         className={`fixed inset-0 z-40 bg-white dark:bg-[#1a1a1a] flex flex-col items-center justify-center transition-all duration-500 ease-in-out md:hidden ${
           isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Offer = () => {
-    // স্লাইডারের জন্য ছবির লিস্ট
+
     const images = [
         "/Special/img-1.avif",
         "/Special/img-2.avif",
@@ -10,7 +10,7 @@ const Offer = () => {
 
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    // স্লাইডার নেভিগেশন লজিক
+   
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     };
@@ -18,13 +18,13 @@ const Offer = () => {
         setCurrentSlide((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
 
-    // অটো প্লে স্লাইডার
+  
     useEffect(() => {
         const slideInterval = setInterval(nextSlide, 4000);
         return () => clearInterval(slideInterval);
     }, []);
 
-    // কাউন্টডাউন টাইমার লজিক
+   
     const [timeLeft, setTimeLeft] = useState({
         days: 2,
         hours: 14,
@@ -46,7 +46,7 @@ const Offer = () => {
         return () => clearInterval(timer);
     }, []);
 
-    // টাইমার কার্ড কম্পোনেন্ট
+    
     const TimeBox = ({ value, label }) => (
         <div className="flex flex-col items-center justify-center bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 p-2 md:p-4 rounded-xl md:rounded-2xl shadow-lg shadow-pink-100/50 dark:shadow-none min-w-[60px] md:min-w-[90px]">
             <span className="text-lg md:text-3xl font-bold text-gray-900 dark:text-white font-serif">
@@ -75,8 +75,7 @@ const Offer = () => {
                         
                         {/* --- Left Side: Slider --- */}
                         <div className="relative order-1">
-                            {/* Slider Frame: হাইট h-[350px] এর বদলে h-64 (256px) বা sm:h-80 দেওয়া হয়েছে যাতে চিকন না লাগে */}
-                            <div className="relative rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl shadow-pink-900/10 dark:shadow-black/50 h-64 sm:h-80 md:h-[500px] w-full bg-white dark:bg-gray-800 group">
+                           <div className="relative rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl shadow-pink-900/10 dark:shadow-black/50 h-64 sm:h-80 md:h-[500px] w-full bg-white dark:bg-gray-800 group">
                                 
                                 {/* Images */}
                                 {images.map((img, index) => (

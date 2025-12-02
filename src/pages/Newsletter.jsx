@@ -4,19 +4,16 @@ const Newsletter = () => {
     return (
         <section className="py-16 md:py-24 px-4 md:px-6 lg:px-12 bg-[#FFF0F5] dark:bg-[#0f0f0f] relative overflow-hidden transition-colors duration-300">
             
-            {/* --- Decorative Background Blobs --- */}
+          
             <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-pink-400/10 dark:bg-pink-500/10 rounded-full blur-[100px] opacity-50 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
             <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/10 dark:bg-purple-500/10 rounded-full blur-[100px] opacity-50 translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
 
             <div className="max-w-7xl mx-auto relative z-10">
-                {/* Border Radius কমিয়ে rounded-2xl বা rounded-3xl করা হয়েছে */}
+               
                 <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl md:rounded-3xl shadow-2xl shadow-pink-100/50 dark:shadow-none overflow-hidden flex flex-col lg:flex-row border border-white dark:border-gray-800">
                     
-                    {/* --- Left Side: Image --- */}
-                    {/* overflow-hidden এখানে দেওয়া হয়েছে যাতে জুম করলে ইমেজ বাইরে না যায় */}
                     <div className="w-full lg:w-5/12 relative h-64 sm:h-80 lg:h-auto group overflow-hidden">
                         
-                        {/* Image: z-0 দেওয়া হয়েছে যাতে এটি গ্রাডিয়েন্টের নিচে থাকে */}
                         <img 
                             src="/News/img-1.avif" 
                             alt="Newsletter Floral" 
@@ -25,8 +22,7 @@ const Newsletter = () => {
                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110 z-0"
                         />
                         
-                        {/* Overlay Gradient: z-10 দেওয়া হয়েছে যাতে এটি সবসময় ইমেজের উপরে থাকে */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-black/30 z-10 pointer-events-none"></div>
+                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-black/30 z-10 pointer-events-none"></div>
                         
                         {/* Text over Image */}
                         <div className="absolute bottom-6 left-6 text-white hidden lg:block z-20">
