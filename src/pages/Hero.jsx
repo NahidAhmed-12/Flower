@@ -14,7 +14,7 @@ const Hero = () => {
         },
         {
             id: 1,
-            img: "/Hero/img-3.webp", 
+            img: "/Hero/img-3.avif", 
             topText: "Top Rated",
             bottomLabel: "Exclusive",
             bottomValue: "Royal Rose",
@@ -23,7 +23,7 @@ const Hero = () => {
         },
         {
             id: 2,
-            img: "/Hero/img-2.webp", 
+            img: "/Hero/img-2.avif", 
             topText: "Customer Choice",
             bottomLabel: "Delivery",
             bottomValue: "Express",
@@ -32,7 +32,7 @@ const Hero = () => {
         },
         {
             id: 3,
-            img: "/Hero/img-1.webp", 
+            img: "/Hero/img-1.avif",
             topText: "New Arrival",
             bottomLabel: "Starting",
             bottomValue: "$49.00",
@@ -41,7 +41,7 @@ const Hero = () => {
         },
         {
             id: 4,
-            img: "/Hero/img-4.webp", 
+            img: "/Hero/img-4.avif", 
             topText: "Aromatic",
             bottomLabel: "Limited",
             bottomValue: "Bundle Deal",
@@ -50,7 +50,7 @@ const Hero = () => {
         },
         {
             id: 5,
-            img: "/Hero/img-5.webp", 
+            img: "/Hero/img-5.avif", 
             topText: "Premium",
             bottomLabel: "Quality",
             bottomValue: "100% Fresh",
