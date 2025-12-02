@@ -1,363 +1,208 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+
+// --- স্লাইডার ডাটা (Flower Data) ---
+const slides = [
+  {
+    id: 0,
+    img: "/Hero/img-0.avif",
+    subtitle: "Best Seller",
+    title: "Spring Vibe Collection"
+  },
+  {
+    id: 1,
+    img: "/Hero/img-3.avif",
+    subtitle: "Top Rated",
+    title: "Royal Rose Exclusive"
+  },
+  {
+    id: 2,
+    img: "/Hero/img-2.avif",
+    subtitle: "Customer Choice",
+    title: "Express Delivery"
+  },
+  {
+    id: 3,
+    img: "/Hero/img-1.avif",
+    subtitle: "New Arrival",
+    title: "Starting at $49.00"
+  },
+  {
+    id: 4,
+    img: "/Hero/img-4.avif",
+    subtitle: "Aromatic",
+    title: "Limited Bundle Deal"
+  },
+  {
+    id: 5,
+    img: "/Hero/img-5.avif",
+    subtitle: "Premium",
+    title: "100% Fresh Quality"
+  }
+];
 
 const Hero = () => {
-    // --- স্লাইডার ডেটা ---
-    const slides = [
-        {
-            id: 0,
-            img: "/Hero/img-0.avif", 
-            topText: "Best Seller",
-            bottomLabel: "Collection",
-            bottomValue: "Spring Vibe",
-            blobColor1: "#e1f5f3", 
-            blobColor2: "#ffd5e5"  
-        },
-        {
-            id: 1,
-            img: "/Hero/img-3.avif", 
-            topText: "Top Rated",
-            bottomLabel: "Exclusive",
-            bottomValue: "Royal Rose",
-            blobColor1: "#fbcfe8", 
-            blobColor2: "#e9d5ff"  
-        },
-        {
-            id: 2,
-            img: "/Hero/img-2.avif", 
-            topText: "Customer Choice",
-            bottomLabel: "Delivery",
-            bottomValue: "Express",
-            blobColor1: "#fee2e2", 
-            blobColor2: "#ffedd5"  
-        },
-        {
-            id: 3,
-            img: "/Hero/img-1.avif",
-            topText: "New Arrival",
-            bottomLabel: "Starting",
-            bottomValue: "$49.00",
-            blobColor1: "#fef9c3", 
-            blobColor2: "#f0d8bb"  
-        },
-        {
-            id: 4,
-            img: "/Hero/img-4.avif", 
-            topText: "Aromatic",
-            bottomLabel: "Limited",
-            bottomValue: "Bundle Deal",
-            blobColor1: "#e0f2fe", 
-            blobColor2: "#fff1d9"  
-        },
-        {
-            id: 5,
-            img: "/Hero/img-5.avif", 
-            topText: "Premium",
-            bottomLabel: "Quality",
-            bottomValue: "100% Fresh",
-            blobColor1: "#f3e8ff", 
-            blobColor2: "#eeffe3"  
-        }
-    ];
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const currentYear = new Date().getFullYear();
 
-    const [activeIndex, setActiveIndex] = useState(0);
-    const heroSectionRef = useRef(null);
-    const autoplayTimerRef = useRef(null);
-    const isInteracting = useRef(false);
-    
-    // Touch handling state
-    const [touchStart, setTouchStart] = useState(null);
-    const [touchEnd, setTouchEnd] = useState(null);
-    
-    const [showControls, setShowControls] = useState(true); 
-    const sliderContainerRef = useRef(null); 
+  // --- Auto Play Logic ---
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [currentSlide]);
 
-    // --- Controls Hide Logic ---
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowControls(false);
-        }, 15000);
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  };
 
-        const handleClickOutside = (event) => {
-            if (sliderContainerRef.current && !sliderContainerRef.current.contains(event.target)) {
-                setShowControls(false);
-            }
-        };
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            clearTimeout(timer);
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+  return (
+    <div className="w-full min-h-screen bg-[#FFF0F5] dark:bg-[#0f0f0f] transition-colors duration-300 relative overflow-hidden font-sans selection:bg-pink-200 selection:text-pink-900">
+      
+      {/* Background Orbs (Flower Theme Colors) */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-pink-400/10 rounded-full blur-[100px] pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[80px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
 
-    // --- Slider Logic ---
-    const nextSlide = useCallback(() => {
-        setActiveIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, [slides.length]);
-
-    const prevSlide = useCallback(() => {
-        setActiveIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-    }, [slides.length]);
-
-    const goToSlide = (index) => {
-        setActiveIndex(index);
-    };
-
-    // --- Autoplay Logic ---
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (!isInteracting.current) {
-                nextSlide();
-            }
-        }, 3500); 
-
-        return () => clearInterval(interval);
-    }, [nextSlide]);
-
-
-    // --- Interaction Handlers ---
-    const handleInteractionStart = () => {
-        isInteracting.current = true;
-        if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
-    };
-
-    const handleInteractionEnd = () => {
-        if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
-        autoplayTimerRef.current = setTimeout(() => {
-            isInteracting.current = false;
-        }, 5000);
-    };
-
-    // --- Touch / Swipe Logic ---
-    const onTouchStart = (e) => {
-        handleInteractionStart();
-        setTouchEnd(null);
-        setTouchStart(e.targetTouches[0].clientX);
-    };
-
-    const onTouchMove = (e) => {
-        setTouchEnd(e.targetTouches[0].clientX);
-    };
-
-    const onTouchEnd = () => {
-        if (!touchStart || !touchEnd) return;
+      {/* Main Wrapper */}
+      <div className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between h-full min-h-screen px-6 py-20 lg:pt-28 gap-12 lg:gap-0 relative z-10">
         
-        const distance = touchStart - touchEnd;
-        const isLeftSwipe = distance > 50;
-        const isRightSwipe = distance < -50;
-
-        if (isLeftSwipe) nextSlide();
-        if (isRightSwipe) prevSlide();
-        handleInteractionEnd();
-    };
-
-    return (
-        <section 
-            ref={heroSectionRef} 
-            // UPDATE: Added 'select-none' here to prevent text selection
-            className="relative w-full min-h-screen flex items-center py-20 lg:py-28 px-6 lg:px-12 overflow-hidden bg-white z-0 select-none"
-        >
+        {/* Left Side: Text Content */}
+        <div className="flex flex-col justify-center w-full lg:w-1/2 text-center lg:text-left z-20 relative">
+          
+          <div className="space-y-6 relative z-10">
             
-            {/* --- WATERMARK TEXT --- */}
-            <div className="absolute top-20 left-0 lg:left-20 pointer-events-none -z-10 opacity-[0.03]">
-                <h1 className="text-[15vw] leading-none font-black text-gray-900 tracking-tighter">
-                    BLOOM
-                </h1>
+            {/* Tagline */}
+            <div className="flex items-center justify-center lg:justify-start gap-3">
+                <span className="w-8 h-[2px] bg-pink-500 inline-block"></span>
+                <p className="text-pink-600 dark:text-pink-400 font-bold tracking-[0.2em] text-xs uppercase">
+                Est. {currentYear} Bloom
+                </p>
             </div>
-
-            {/* --- BACKGROUND BLOBS --- */}
-            <div 
-                className="absolute top-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full mix-blend-multiply filter blur-[80px] -z-10 animate-float transition-colors duration-1000 ease-linear opacity-50"
-                style={{ backgroundColor: slides[activeIndex].blobColor1 }}
-            ></div>
             
-            <div 
-                className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-[80px] -z-10 animate-float transition-colors duration-1000 ease-linear opacity-50"
-                style={{ 
-                    backgroundColor: slides[activeIndex].blobColor2,
-                    animationDelay: '3s' 
-                }}
-            ></div>
+            {/* H1 Title with Star & Brush Stroke */}
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-gray-900 dark:text-white leading-[1.2] relative inline-block">
+              
+              {/* Animated Floating Star (Pink) */}
+              <svg className="absolute -top-6 -right-8 w-8 h-8 text-pink-400 animate-[spin_4s_linear_infinite]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+              </svg>
 
-            {/* Main Content Container */}
-            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center relative z-10">
+              Nature’s <br />
+              
+              <span className="relative inline-block z-10 mt-1">
+                {/* Gradient Text */}
+                <span className="italic font-light text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-purple-500 to-pink-600 z-10 relative px-1 pb-1">
+                  Masterpiece
+                </span>
                 
-                {/* --- LEFT TEXT CONTENT --- */}
-                <div className="text-center md:text-left order-2 md:order-1 flex flex-col items-center md:items-start space-y-8">
-                    
-                    {/* Brand Tag Line */}
-                    <div className="flex items-center gap-3 animate-fade-in-up">
-                        <div className="h-[1px] w-12 bg-gray-400"></div>
-                        <span className="text-sm font-bold tracking-[0.3em] uppercase text-gray-500">Since 2024</span>
-                    </div>
+                {/* Brush Stroke SVG (Pink Tint) */}
+                <svg className="absolute -bottom-2 left-0 w-full h-3 text-pink-500/80 -z-10" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.00025 6.99999C45.5002 1.5 130 -2.5 198.5 3.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                </svg>
+              </span>
+            </h1>
+            
+            <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-md mx-auto lg:mx-0 leading-relaxed font-light">
+              Discover the art of gifting with our hand-picked floral arrangements. Curated for elegance, delivered with love & care.
+            </p>
+          </div>
+          
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-8 relative z-10">
+            
+            {/* Primary Button */}
+            <button className="group flex items-center justify-center gap-2 px-8 py-3.5 bg-pink-600 text-white rounded-lg text-sm font-bold tracking-wide hover:bg-pink-700 transition-all duration-300 shadow-lg shadow-pink-600/30 transform hover:-translate-y-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 group-hover:scale-110 transition-transform">
+                <path fillRule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 004.25 22.5h15.5a1.875 1.875 0 001.865-2.071l-1.263-12a1.875 1.875 0 00-1.865-1.679H16.5V6a4.5 4.5 0 10-9 0zM12 3a3 3 0 00-3 3v.75h6V6a3 3 0 00-3-3zm-3 8.25a3 3 0 106 0v-.75a.75.75 0 011.5 0v.75a4.5 4.5 0 11-9 0v-.75a.75.75 0 011.5 0v.75z" clipRule="evenodd" />
+              </svg>
+              Shop Collection
+            </button>
+            
+            {/* Secondary Button */}
+            <button className="group flex items-center justify-center gap-2 px-8 py-3.5 border-2 border-pink-200 dark:border-pink-900/50 text-gray-800 dark:text-gray-200 rounded-lg text-sm font-bold tracking-wide hover:border-pink-500 hover:text-pink-600 dark:hover:text-pink-400 transition-all duration-300 bg-white/50 dark:bg-black/20">
+              How we work
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 group-hover:translate-x-1 transition-transform">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </button>
+          </div>
 
-                    {/* Headline */}
-                    <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold leading-[1] text-gray-900 tracking-tight">
-                        Nature’s <br />
-                        <span className="font-serif italic font-light text-pink-500 block mt-2 relative z-10">
-                            Masterpiece
-                            <svg className="absolute -bottom-2 left-0 w-full h-3 text-pink-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" />
-                            </svg>
-                        </span>
-                    </h1>
+          {/* Stats */}
+          <div className="flex items-center justify-center lg:justify-start gap-8 pt-10 relative z-10">
+             <div>
+                <p className="text-2xl font-serif text-gray-900 dark:text-white">2k+</p>
+                <p className="text-xs text-pink-500/80 uppercase tracking-wider mt-1">Trusted Clients</p>
+             </div>
+             <div className="w-px h-8 bg-pink-200 dark:bg-pink-900"></div>
+             <div>
+                <p className="text-2xl font-serif text-gray-900 dark:text-white">4.9</p>
+                <p className="text-xs text-pink-500/80 uppercase tracking-wider mt-1">Star Rating</p>
+             </div>
+          </div>
+        </div>
 
-                    {/* Description */}
-                    <div className="border-l-4 border-pink-500/30 pl-6 text-left max-w-lg">
-                        <p className="text-gray-600 text-lg leading-relaxed font-light">
-                            Discover the art of gifting with our hand-picked floral arrangements. 
-                            Curated for elegance, delivered with <span className="font-medium text-gray-900">love & care.</span>
-                        </p>
-                    </div>
-                    
-                    {/* Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto pt-4">
-                        <button className="group relative px-8 py-4 rounded-full bg-gray-900 text-white font-medium overflow-hidden shadow-2xl shadow-gray-900/30 hover:shadow-pink-500/40 transition-all duration-300 hover:-translate-y-1">
-                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                Shop Collection
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                            </span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        </button>
-                        
-                        <button className="group flex items-center justify-center gap-3 px-6 py-4 rounded-full text-gray-700 hover:text-pink-600 transition-colors font-medium">
-                            <span className="relative flex h-10 w-10">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-20"></span>
-                                <span className="relative inline-flex rounded-full h-10 w-10 bg-white border border-gray-200 items-center justify-center shadow-sm group-hover:border-pink-200 group-hover:scale-110 transition-transform">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                </span>
-                            </span>
-                            <span className="underline decoration-transparent group-hover:decoration-pink-300 underline-offset-4 transition-all">How we work</span>
-                        </button>
-                    </div>
 
-                    {/* Trusted Section */}
-                    <div className="flex items-center gap-4 pt-6">
-                        <div className="flex -space-x-3">
-                            <img className="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" />
-                            <img className="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" />
-                            <img className="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" />
-                            <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-900 text-white flex items-center justify-center text-xs font-bold shadow-sm">
-                                +2k
-                            </div>
-                        </div>
-                        <div>
-                            <p className="text-sm font-bold text-gray-900">Trusted by Clients</p>
-                            <div className="flex text-yellow-400 text-xs">
-                                ★★★★★ <span className="text-gray-400 ml-1 font-normal">(4.9/5)</span>
-                            </div>
-                        </div>
+        {/* Right Side: Image Slider */}
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative">
+          
+          {/* Animated Background Rings (Pink Theme) */}
+          <div className="absolute top-1/2 left-1/2 lg:left-auto lg:right-[190px] -translate-x-1/2 lg:translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] z-0 hidden sm:block pointer-events-none">
+             <div className="absolute inset-0 border border-dashed border-pink-300 dark:border-pink-800/40 rounded-full animate-[spin_20s_linear_infinite] opacity-40"></div>
+             <div className="absolute inset-12 border border-pink-200 dark:border-pink-900/30 rounded-full animate-[spin_15s_linear_infinite_reverse] opacity-60"></div>
+             <div className="absolute inset-20 bg-pink-500/5 dark:bg-pink-500/10 rounded-full blur-2xl animate-pulse"></div>
+          </div>
+
+          {/* Image Container */}
+          <div className="relative w-full max-w-sm aspect-[3/4] group z-10">
+            {/* Offset Border */}
+            <div className="absolute top-5 -right-5 w-full h-full border-2 border-pink-500/20 rounded-2xl z-0 hidden lg:block transition-all duration-500 group-hover:top-3 group-hover:-right-3"></div>
+
+            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-pink-900/10 dark:shadow-black/50 z-10 bg-gray-100">
+                {slides.map((slide, index) => (
+                <div key={slide.id} className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}>
+                    <img src={slide.img} alt={slide.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 pt-24">
+                        <p className="text-pink-300 text-xs tracking-wider uppercase mb-1 font-bold animate-[fadeInUp_1s_ease-out]">{slide.subtitle}</p>
+                        <h3 className="text-white text-xl font-serif tracking-wide">{slide.title}</h3>
                     </div>
                 </div>
+                ))}
                 
-                {/* --- IMAGE SLIDER SECTION --- */}
-                <div className="order-1 md:order-2 relative flex justify-center md:justify-end h-full">
-                    
-                    <div 
-                        ref={sliderContainerRef} 
-                        className="group relative w-full h-[450px] md:h-[600px] lg:h-[650px] max-h-[80vh] max-w-md md:max-w-none rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl shadow-pink-900/10 cursor-grab active:cursor-grabbing transform-gpu translate-z-0 bg-white"
-                        onTouchStart={onTouchStart}
-                        onTouchMove={onTouchMove}
-                        onTouchEnd={onTouchEnd}
-                    >
-                        
-                        {/* --- SLIDES --- */}
-                        <div className="relative w-full h-full">
-                            {slides.map((slide, index) => (
-                                <div 
-                                    key={slide.id}
-                                    className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-out bg-white overflow-hidden
-                                        ${index === activeIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-110'}
-                                    `}
-                                >
-                                    {/* UPDATE: Added hover:scale-110 and transition for hover zoom effect */}
-                                    <img 
-                                        src={slide.img} 
-                                        alt="Premium Flower Bouquet" 
-                                        loading={index === 0 ? "eager" : "lazy"}
-                                        className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out hover:scale-110"
-                                    />
-                                    
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60 pointer-events-none"></div>
-                                </div>
-                            ))}
-                        </div>
+                {/* Slider Dots */}
+                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+                    {slides.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setCurrentSlide(index)}
+                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                        currentSlide === index 
+                            ? 'w-6 bg-pink-500' 
+                            : 'w-2 bg-white/50 hover:bg-white'
+                        }`}
+                    />
+                    ))}
+                </div>
 
-                        {/* --- ARROWS --- */}
-                        <div className={`absolute inset-0 flex items-center justify-between px-4 z-40 pointer-events-none transition-opacity duration-300 ${showControls ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                            <button 
-                                onClick={() => { handleInteractionStart(); prevSlide(); handleInteractionEnd(); }}
-                                className="pointer-events-auto w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white hover:text-gray-900 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                            </button>
-                            
-                            <button 
-                                onClick={() => { handleInteractionStart(); nextSlide(); handleInteractionEnd(); }}
-                                className="pointer-events-auto w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white hover:text-gray-900 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                            </button>
-                        </div>
-
-                        {/* --- DOTS --- */}
-                        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-40 pointer-events-auto p-2 rounded-full bg-black/10 backdrop-blur-sm border border-white/10">
-                            {slides.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => { handleInteractionStart(); goToSlide(index); handleInteractionEnd(); }}
-                                    className={`h-2 rounded-full transition-all duration-500 ease-out ${
-                                        activeIndex === index 
-                                        ? 'w-8 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]' 
-                                        : 'w-2 bg-white/40 hover:bg-white/80'
-                                    }`}
-                                ></button>
-                            ))}
-                        </div>
-
-                        {/* --- FLOATING CARD: Top Left --- */}
-                        <div className="absolute top-6 left-6 md:top-8 md:left-8 bg-white/80 backdrop-blur-xl p-3 pr-5 rounded-2xl shadow-lg border border-white/50 animate-float z-30 transition-transform duration-500 hover:scale-105 pointer-events-none md:pointer-events-auto">
-                            <div className="flex items-center gap-3">
-                                <div className="flex -space-x-2">
-                                    <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden">
-                                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="user" className="w-full h-full object-cover"/>
-                                    </div>
-                                    <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden flex items-center justify-center bg-pink-100 text-[10px] font-bold text-pink-600">
-                                        +99
-                                    </div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="flex text-yellow-400 text-xs tracking-tighter">★★★★★</div>
-                                    <span className="text-[10px] font-bold text-gray-800 uppercase tracking-wide mt-0.5">
-                                        {slides[activeIndex].topText}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* --- FLOATING CARD: Bottom Right (Hidden on Mobile) --- */}
-                        <div 
-                            className="hidden md:flex absolute bottom-12 right-8 bg-white/90 backdrop-blur-xl p-4 pl-5 rounded-2xl shadow-xl border border-white/60 items-center gap-4 animate-float z-30 transition-transform duration-500 hover:-translate-y-1 pointer-events-none md:pointer-events-auto" 
-                            style={{ animationDelay: '1.5s' }}
-                        >
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 text-white flex items-center justify-center shadow-lg shadow-pink-500/30">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                            </div>
-                            <div>
-                                <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">
-                                    {slides[activeIndex].bottomLabel}
-                                </p>
-                                <p className="text-xl font-serif font-bold text-gray-900">
-                                    {slides[activeIndex].bottomValue}
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
+                {/* Slider Navigation Arrows */}
+                <div className="absolute bottom-6 right-6 flex items-center gap-3 z-20">
+                   <button onClick={prevSlide} className="p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white transition-all border border-white/10">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                   </button>
+                   <button onClick={nextSlide} className="p-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white transition-all shadow-lg shadow-pink-500/20">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                   </button>
                 </div>
             </div>
-        </section>
-    );
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
 };
 
 export default Hero;
