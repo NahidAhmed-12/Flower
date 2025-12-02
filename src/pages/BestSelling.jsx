@@ -10,7 +10,7 @@ const BestSelling = () => {
             price: "$45.00",
             oldPrice: "$55.00",
             rating: 5.0,
-            img: "/Selling/img-1.webp",
+            img: "/Selling/img-1.avif",
             tag: "Sale"
         },
         {
@@ -19,7 +19,7 @@ const BestSelling = () => {
             price: "$38.00",
             oldPrice: null,
             rating: 4.8,
-            img: "/Selling/img-2.webp",
+            img: "/Selling/img-2.avif",
             tag: "New"
         },
         {
@@ -28,7 +28,7 @@ const BestSelling = () => {
             price: "$65.00",
             oldPrice: "$80.00",
             rating: 4.9,
-            img: "/Selling/img-3.webp",
+            img: "/Selling/img-3.avif",
             tag: "Popular"
         },
         {
@@ -37,7 +37,7 @@ const BestSelling = () => {
             price: "$42.00",
             oldPrice: null,
             rating: 4.7,
-            img: "/Selling/img-4.webp",
+            img: "/Selling/img-4.avif",
             tag: null
         }
     ];

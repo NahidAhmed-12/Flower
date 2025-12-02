@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 const Offer = () => {
     // স্লাইডারের জন্য ছবির লিস্ট
     const images = [
-        "/Special/img-1.webp",
-        "/Special/img-2.webp",
-        "/Special/img-3.webp"
+        "/Special/img-1.avif",
+        "/Special/img-2.avif",
+        "/Special/img-3.avif",
     ];
 
     const [currentSlide, setCurrentSlide] = useState(0);

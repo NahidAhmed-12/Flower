@@ -14,7 +14,7 @@ const Newsletter = () => {
                     {/* --- Left Side: Image (Mobile: Top Banner) --- */}
                     <div className="w-full lg:w-5/12 relative h-[250px] lg:h-auto group">
                         <img 
-                            src="/News/img-1.webp" 
+                            src="/News/img-1.avif" 
                             alt="Newsletter Floral" 
                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />

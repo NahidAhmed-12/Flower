@@ -8,28 +8,28 @@ const Categories = () => {
             id: "01",
             name: "Romantic Love",
             price: "Start from $29",
-            image: "/Explore/img-1.webp", 
+            image: "/Explore/img-1.avif", 
             link: "Shop Collection"
         },
         {
             id: "02",
             name: "Wedding Elegance",
             price: "Start from $150",
-            image: "/Explore/img-2.webp", 
+            image: "/Explore/img-2.avif", 
             link: "Plan Wedding"
         },
         {
             id: "03",
             name: "Sympathy Lilies",
             price: "Start from $45",
-            image: "/Explore/img-3.webp", 
+            image: "/Explore/img-3.avif", 
             link: "Send Comfort"
         },
         {
             id: "04",
             name: "Luxury Decor",
             price: "Start from $60",
-            image: "/Explore/img-4.webp", 
+            image: "/Explore/img-4.avif", 
             link: "View Decor"
         },
         {
