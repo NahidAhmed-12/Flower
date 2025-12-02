@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom'; // ১. এটি ইমপোর্ট করতে হবে
 
 const BestSelling = () => {
     
@@ -43,10 +44,9 @@ const BestSelling = () => {
     ];
 
     // --- State Management ---
-    const [selectedImage, setSelectedImage] = useState(null); // বড় ছবির জন্য স্টেট
-    const [wishlist, setWishlist] = useState([]); // লাভ রিঅ্যাক্টের জন্য স্টেট
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [wishlist, setWishlist] = useState([]);
 
-    // লাভ বাটনে ক্লিক হ্যান্ডলার
     const toggleWishlist = (id) => {
         if (wishlist.includes(id)) {
             setWishlist(wishlist.filter(item => item !== id));
@@ -58,13 +58,13 @@ const BestSelling = () => {
     return (
         <section className="py-20 lg:py-28 px-6 lg:px-12 bg-[#FFF0F5] dark:bg-[#0f0f0f] relative overflow-hidden transition-colors duration-300">
             
-            {/* --- Background Blobs --- */}
+            {/* Background Elements */}
             <div className="absolute top-20 left-0 w-96 h-96 bg-pink-400/10 dark:bg-pink-500/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
             <div className="absolute bottom-20 right-0 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/10 rounded-full blur-[80px] pointer-events-none -z-10"></div>
 
             <div className="max-w-7xl mx-auto relative z-10">
                 
-                {/* --- Header Section --- */}
+                {/* Header Section */}
                 <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
                     <div className="flex items-center justify-center gap-3">
                         <span className="w-8 h-[2px] bg-pink-500 inline-block"></span>
@@ -82,22 +82,18 @@ const BestSelling = () => {
                     </p>
                 </div>
 
-                {/* --- Product Grid --- */}
+                {/* Product Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {products.map((product) => (
-                        // --- UPDATED UI: Reduced Border Radius & Premium Shadow ---
                         <div key={product.id} className="group bg-white dark:bg-[#1a1a1a] rounded-2xl p-3 border border-gray-100 dark:border-gray-800 shadow-lg shadow-gray-200/50 dark:shadow-none hover:shadow-2xl hover:shadow-pink-100/40 dark:hover:shadow-pink-900/10 transition-all duration-500 relative top-0 hover:-top-1">
                             
-                            {/* Image Container - Radius Reduced for Premium Look */}
                             <div className="relative overflow-hidden rounded-xl h-80 w-full bg-gray-50 dark:bg-gray-800">
-                                {/* Tag */}
                                 {product.tag && (
                                     <div className="absolute top-3 left-3 z-20 bg-white/95 dark:bg-black/80 backdrop-blur text-gray-900 dark:text-white text-[10px] font-bold px-3 py-1 rounded-md shadow-sm tracking-widest uppercase">
                                         {product.tag}
                                     </div>
                                 )}
 
-                                {/* Main Image - Subtler Zoom */}
                                 <img 
                                     src={product.img} 
                                     alt={product.name}
@@ -106,16 +102,12 @@ const BestSelling = () => {
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
 
-                                {/* Hover Overlay & Actions */}
                                 <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 
                                 <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out z-20 px-4">
-                                    
-                                    {/* Action Buttons */}
                                     <button className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-2.5 rounded-full shadow-lg hover:bg-pink-600 hover:text-white dark:hover:bg-pink-500 transition-colors" title="Add to Cart">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                                     </button>
-                                    
                                     <button 
                                         onClick={() => toggleWishlist(product.id)}
                                         className={`p-2.5 rounded-full shadow-lg transition-all duration-300 transform active:scale-90 ${
@@ -129,7 +121,6 @@ const BestSelling = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                         </svg>
                                     </button>
-
                                     <button 
                                         onClick={() => setSelectedImage(product.img)}
                                         className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-2.5 rounded-full shadow-lg hover:bg-pink-600 hover:text-white dark:hover:bg-pink-500 transition-colors" 
@@ -140,7 +131,6 @@ const BestSelling = () => {
                                 </div>
                             </div>
 
-                            {/* Content (Text kept same as requested) */}
                             <div className="pt-5 px-1">
                                 <div className="flex justify-between items-start mb-2">
                                     <h3 className="font-serif text-xl font-bold text-gray-900 dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors cursor-pointer">
@@ -151,7 +141,6 @@ const BestSelling = () => {
                                         <span className="text-gray-700 dark:text-gray-300 font-sans font-medium">{product.rating}</span>
                                     </div>
                                 </div>
-                                
                                 <div className="flex items-center gap-3 mt-3">
                                     <span className="text-lg font-bold text-pink-600 dark:text-pink-400">{product.price}</span>
                                     {product.oldPrice && (
@@ -163,7 +152,6 @@ const BestSelling = () => {
                     ))}
                 </div>
 
-                {/* --- View All Button --- */}
                 <div className="mt-16 text-center">
                     <button className="inline-flex items-center gap-2 px-8 py-3.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-bold tracking-wide hover:bg-pink-600 dark:hover:bg-pink-500 hover:text-white transition-all duration-300 shadow-lg shadow-gray-900/20 dark:shadow-white/10 hover:-translate-y-0.5">
                         View All Collection
@@ -171,10 +159,13 @@ const BestSelling = () => {
                     </button>
                 </div>
 
-                {/* --- Image Modal --- */}
-                {selectedImage && (
+                {/* 
+                   --- Image Modal with React Portal --- 
+                   এটি এখন 'body' তে রেন্ডার হবে, তাই নেভবারের উপরে আসবেই।
+                */}
+                {selectedImage && createPortal(
                     <div 
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 transition-all duration-300"
+                        className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 transition-all duration-300"
                         onClick={() => setSelectedImage(null)}
                     >
                         <div 
@@ -196,7 +187,8 @@ const BestSelling = () => {
                                 className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
                             />
                         </div>
-                    </div>
+                    </div>,
+                    document.body // <-- এই অংশটি ম্যাজিকের মতো কাজ করবে
                 )}
 
             </div>

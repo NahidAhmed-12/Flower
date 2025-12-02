@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-// --- স্লাইডার ডাটা (আপডেটেড: ৪ ও ৬ নম্বর স্লাইডের কালার পরিবর্তন করা হয়েছে) ---
+
+// --- স্লাইডার ডাটা (আপডেটেড: orb1 এর কালার হালকা এবং সফট করা হয়েছে) ---
 const slides = [
   {
     id: 0,
     img: "/Hero/img-0.avif",
     subtitle: "Best Seller",
     title: "Spring Vibe Collection",
-    orb1: "from-pink-300/40 to-purple-300/30", 
+    // আগে ছিল /40 এখন /25 এবং /20 করে হালকা করা হয়েছে
+    orb1: "from-pink-300/25 to-purple-300/20", 
     orb2: "from-rose-300/30 to-blue-200/20"
   },
   {
@@ -14,7 +16,7 @@ const slides = [
     img: "/Hero/img-3.avif",
     subtitle: "Top Rated",
     title: "Royal Rose Exclusive",
-    orb1: "from-red-300/40 to-orange-300/30",
+    orb1: "from-red-300/25 to-orange-300/20",
     orb2: "from-orange-200/30 to-red-200/20"
   },
   {
@@ -22,16 +24,16 @@ const slides = [
     img: "/Hero/img-2.avif",
     subtitle: "Customer Choice",
     title: "Express Delivery",
-    orb1: "from-blue-300/40 to-cyan-300/30",
+    orb1: "from-blue-300/25 to-cyan-300/20",
     orb2: "from-sky-200/30 to-indigo-200/20"
   },
   {
-    id: 3, // (৪ নম্বর স্লাইড)
+    id: 3, 
     img: "/Hero/img-1.avif",
     subtitle: "New Arrival",
     title: "Starting at $49.00",
-    // সাদা ইমেজের জন্য গাঢ় নীল/ইন্ডিগো শেড দেওয়া হলো (আগে সবুজ ছিল)
-    orb1: "from-indigo-400/40 to-blue-400/30",
+    // গাঢ় নীল কমিয়ে সফট ইন্ডিগো করা হয়েছে
+    orb1: "from-indigo-300/25 to-blue-300/20",
     orb2: "from-blue-300/30 to-slate-300/20"
   },
   {
@@ -39,19 +41,20 @@ const slides = [
     img: "/Hero/img-4.avif",
     subtitle: "Aromatic",
     title: "Limited Bundle Deal",
-    orb1: "from-violet-300/40 to-fuchsia-300/30",
+    orb1: "from-violet-300/25 to-fuchsia-300/20",
     orb2: "from-purple-200/30 to-pink-200/20"
   },
   {
-    id: 5, // (৬ নম্বর স্লাইড)
+    id: 5, 
     img: "/Hero/img-5.avif",
     subtitle: "Premium",
     title: "100% Fresh Quality",
-    // সাদা ইমেজের জন্য ডিপ রোজ/রেড শেড দেওয়া হলো (আগে হলুদ ছিল)
-    orb1: "from-rose-500/40 to-pink-500/30",
+    // rose-500 থেকে কমিয়ে rose-400 এবং অপাসিটি কমানো হয়েছে
+    orb1: "from-rose-400/25 to-pink-400/20",
     orb2: "from-red-300/30 to-rose-200/20"
   }
 ];
+
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const currentYear = new Date().getFullYear();
@@ -77,15 +80,15 @@ const Hero = () => {
     <div className="w-full min-h-screen bg-[#FFF5F7] dark:bg-[#0f0f0f] transition-colors duration-300 relative overflow-hidden font-sans selection:bg-pink-200 selection:text-pink-900">
       
       {/* --- BACKGROUND ELEMENTS (Dynamic Gradient Feature) --- */}
+      
       {/* 
-          এখানে slides[currentSlide].orb1 এবং orb2 ব্যবহার করা হয়েছে।
-          duration-1000 দেওয়া হয়েছে যাতে কালার খুব স্মুথলি চেঞ্জ হয়।
+          Top Right Orb (ফিক্স করা হয়েছে):
+          - w-[800px] h-[800px] -> w-[600px] h-[600px] (আকার ছোট করা হয়েছে)
+          - blur-[120px] -> blur-[160px] (আরও সফট করা হয়েছে)
       */}
+      <div className={`absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b ${slides[currentSlide].orb1} rounded-full blur-[160px] pointer-events-none translate-x-1/4 -translate-y-1/4 transition-all duration-1000 ease-in-out`}></div>
       
-      {/* Top Right Orb */}
-      <div className={`absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b ${slides[currentSlide].orb1} rounded-full blur-[120px] pointer-events-none translate-x-1/4 -translate-y-1/4 transition-all duration-1000 ease-in-out`}></div>
-      
-      {/* Bottom Left Orb */}
+      {/* Bottom Left Orb (আগের মতোই রাখা হয়েছে) */}
       <div className={`absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-t ${slides[currentSlide].orb2} rounded-full blur-[100px] pointer-events-none -translate-x-1/4 translate-y-1/4 transition-all duration-1000 ease-in-out`}></div>
 
       {/* Main Wrapper */}
@@ -153,7 +156,7 @@ const Hero = () => {
           {/* Stats */}
           <div className="flex items-center justify-center lg:justify-start gap-8 pt-10 relative z-10">
              <div>
-                <p className="text-2xl font-serif text-gray-900 dark:text-white">2k+</p>
+                <p className="text-2xl font-serif text-gray-900 dark:text-white">8k+</p>
                 <p className="text-xs text-pink-500/80 uppercase tracking-wider mt-1 font-medium">Trusted Clients</p>
              </div>
              <div className="w-px h-8 bg-gradient-to-b from-pink-200 to-transparent dark:from-pink-900"></div>
@@ -165,7 +168,7 @@ const Hero = () => {
         </div>
 
 
-        {/* --- RIGHT SIDE: IMAGE SLIDER (Updated UI) --- */}
+        {/* --- RIGHT SIDE: IMAGE SLIDER --- */}
         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative">
           
           {/* Background Rings */}
