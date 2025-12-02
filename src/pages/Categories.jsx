@@ -44,7 +44,7 @@ const Categories = () => {
     const scroll = (direction) => {
         const container = scrollContainerRef.current;
         if (container) {
-            const scrollAmount = 340; 
+            const scrollAmount = 350; 
             container.scrollBy({
                 left: direction === 'left' ? -scrollAmount : scrollAmount,
                 behavior: 'smooth'
@@ -52,48 +52,56 @@ const Categories = () => {
         }
     };
 
-    // Arrow Icons
+    // Icons
     const ArrowLeft = () => (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
     );
     const ArrowRight = () => (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    );
+    const ArrowDiagonal = () => (
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
     );
 
     return (
-        <section className="py-20 lg:py-28 bg-[#FFF0F5] dark:bg-[#0f0f0f] relative transition-colors duration-300 overflow-hidden">
+        <section className="py-20 lg:py-28 bg-gray-50 dark:bg-[#0a0a0a] relative overflow-hidden">
             
-            {/* Background Glows */}
-            <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-pink-400/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 -translate-x-1/2"></div>
+            {/* Subtle Background Elements */}
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-rose-100/40 dark:bg-rose-900/10 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
             
             <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
                 
-                {/* --- HEADER ROW --- */}
-                <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-                    <div>
-                        <div className="flex items-center gap-3 mb-3">
-                            <span className="w-8 h-[2px] bg-pink-500 inline-block"></span>
-                            <p className="text-pink-600 dark:text-pink-400 font-bold tracking-[0.2em] text-xs uppercase">
-                                Discover Beauty
+                {/* --- HEADER --- */}
+                {/* items-end ছিল, সেটা বদলে items-center md:items-end করা হয়েছে যাতে মোবাইলে সেন্টারে থাকে */}
+                <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-14 gap-8">
+                    
+                    {/* text-center md:text-left যোগ করা হয়েছে */}
+                    <div className="max-w-xl text-center md:text-left">
+                        {/* justify-center md:justify-start যোগ করা হয়েছে */}
+                        <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+                            <span className="w-10 h-[1px] bg-rose-500"></span>
+                            <p className="text-rose-600 dark:text-rose-400 font-semibold tracking-widest text-xs uppercase">
+                                Our Collections
                             </p>
                         </div>
-                        <h2 className="font-serif text-4xl md:text-5xl text-gray-900 dark:text-white leading-tight">
-                            Explore <span className="italic font-light text-pink-600">Categories</span>
+                        <h2 className="font-serif text-4xl md:text-5xl text-gray-900 dark:text-white leading-[1.1]">
+                            Curated floral <br />
+                            <span className="italic font-light text-pink-600">masterpieces.</span>
                         </h2>
                     </div>
 
                     {/* Navigation Buttons */}
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
                         <button 
                             onClick={() => scroll('left')}
-                            className="w-12 h-12 flex items-center justify-center rounded-full border border-pink-200 dark:border-pink-900 text-gray-600 dark:text-gray-300 hover:bg-pink-500 hover:border-pink-500 hover:text-white dark:hover:bg-pink-600 transition-all duration-300 shadow-sm"
+                            className="w-12 h-12 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-black hover:border-black hover:text-white dark:hover:bg-white dark:hover:border-white dark:hover:text-black transition-all duration-300"
                             aria-label="Scroll Left"
                         >
                             <ArrowLeft />
                         </button>
                         <button 
                             onClick={() => scroll('right')}
-                            className="w-12 h-12 flex items-center justify-center rounded-full border border-pink-200 dark:border-pink-900 text-gray-600 dark:text-gray-300 hover:bg-pink-500 hover:border-pink-500 hover:text-white dark:hover:bg-pink-600 transition-all duration-300 shadow-sm"
+                            className="w-12 h-12 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-black hover:border-black hover:text-white dark:hover:bg-white dark:hover:border-white dark:hover:text-black transition-all duration-300"
                             aria-label="Scroll Right"
                         >
                             <ArrowRight />
@@ -104,53 +112,45 @@ const Categories = () => {
                 {/* --- SLIDER --- */}
                 <div 
                     ref={scrollContainerRef}
-                    className="flex gap-6 overflow-x-auto pb-10 scroll-smooth scrollbar-hide select-none py-4"
+                    className="flex gap-6 overflow-x-auto pb-12 scroll-smooth scrollbar-hide select-none py-2"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                     {categories.map((cat) => (
                         <div 
                             key={cat.id} 
-                            className="min-w-[280px] md:min-w-[340px] h-[480px] relative group rounded-[2rem] overflow-hidden cursor-pointer bg-white dark:bg-[#1a1a1a] shadow-lg shadow-pink-100/50 dark:shadow-none border border-white/50 dark:border-gray-800"
+                            className="min-w-[280px] md:min-w-[320px] h-[460px] relative group rounded-xl overflow-hidden cursor-pointer bg-gray-200 dark:bg-[#1a1a1a]"
                         >
-                            {/* Image */}
+                            {/* Image with Zoom Effect */}
                             <img 
                                 src={cat.image} 
                                 alt={cat.name}
-                                width="340" 
-                                height="480"
-                                loading="lazy"
-                                decoding="async"
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                             />
 
-                            {/* Gradient Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+                            {/* Refined Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
 
-                            {/* Floating Glass Content Card */}
-                            <div className="absolute bottom-6 left-6 right-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                                <div className="bg-white/10 dark:bg-black/40 backdrop-blur-xl border border-white/30 p-5 rounded-2xl shadow-xl overflow-hidden relative">
-                                    
-                                    {/* Shimmer Effect on Hover */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-
-                                    <h3 className="font-serif text-2xl text-white mb-1 relative z-10">
+                            {/* Content Layout */}
+                            <div className="absolute bottom-0 left-0 w-full p-6 text-white translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                                
+                                {/* Top Line: Name & Price */}
+                                <div className="border-b border-white/20 pb-4 mb-4">
+                                    <h3 className="font-serif text-2xl mb-1 tracking-wide">
                                         {cat.name}
                                     </h3>
-                                    
-                                    <div className="flex justify-between items-center mt-3 relative z-10">
-                                        <div>
-                                            <p className="text-pink-200 text-xs uppercase tracking-wider font-semibold">
-                                                From
-                                            </p>
-                                            <p className="text-white font-medium">
-                                                {cat.price}
-                                            </p>
-                                        </div>
-                                        
-                                        <span className="w-10 h-10 bg-white text-pink-600 rounded-full flex items-center justify-center transform translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500 shadow-lg">
-                                            <ArrowRight />
-                                        </span>
-                                    </div>
+                                    <p className="text-white/70 text-sm font-light">
+                                        {cat.price}
+                                    </p>
+                                </div>
+
+                                {/* Bottom Interaction: Button */}
+                                <div className="flex items-center justify-between opacity-100 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span className="text-sm font-medium tracking-wider uppercase">
+                                        {cat.link}
+                                    </span>
+                                    <span className="w-8 h-8 flex items-center justify-center bg-white text-black rounded-full transform rotate-45 group-hover:rotate-0 transition-transform duration-500">
+                                        <ArrowDiagonal />
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -161,11 +161,6 @@ const Categories = () => {
             <style>{`
                 .scrollbar-hide::-webkit-scrollbar {
                     display: none;
-                }
-                @keyframes shimmer {
-                    100% {
-                        transform: translateX(100%);
-                    }
                 }
             `}</style>
         </section>

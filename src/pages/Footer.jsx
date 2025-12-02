@@ -17,7 +17,7 @@ const Footer = () => {
                     <div className="space-y-6">
                         <a href="#" className="flex items-center gap-2 group">
                             <h2 className="font-serif text-3xl font-bold text-gray-900 dark:text-white">
-                                Bloom<span className="text-pink-600">.</span>
+                                LUXE<span className="text-pink-600">.</span>
                             </h2>
                         </a>
                         <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-light">
@@ -108,7 +108,7 @@ const Footer = () => {
                 {/* --- Bottom Section --- */}
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-gray-500 dark:text-gray-500 text-xs text-center md:text-left font-light">
-                        © {new Date().getFullYear()} <span className="text-gray-900 dark:text-white font-bold">Bloom</span>. All rights reserved.
+                        © {new Date().getFullYear()} <span className="text-gray-900 dark:text-white font-bold">LOXE </span>. All rights reserved.
                     </p>
                     
                     {/* Payment Icons */}

@@ -58,7 +58,7 @@ const BestSelling = () => {
     return (
         <section className="py-20 lg:py-28 px-6 lg:px-12 bg-[#FFF0F5] dark:bg-[#0f0f0f] relative overflow-hidden transition-colors duration-300">
             
-            {/* --- Background Blobs (Matching Hero Style) --- */}
+            {/* --- Background Blobs --- */}
             <div className="absolute top-20 left-0 w-96 h-96 bg-pink-400/10 dark:bg-pink-500/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
             <div className="absolute bottom-20 right-0 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/10 rounded-full blur-[80px] pointer-events-none -z-10"></div>
 
@@ -85,40 +85,40 @@ const BestSelling = () => {
                 {/* --- Product Grid --- */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {products.map((product) => (
-                        <div key={product.id} className="group bg-white dark:bg-[#1a1a1a] rounded-[2rem] p-4 border border-white dark:border-gray-800 shadow-xl shadow-pink-100/50 dark:shadow-none hover:shadow-2xl hover:shadow-pink-200/50 dark:hover:shadow-pink-900/10 transition-all duration-500 relative top-0 hover:-top-2">
+                        // --- UPDATED UI: Reduced Border Radius & Premium Shadow ---
+                        <div key={product.id} className="group bg-white dark:bg-[#1a1a1a] rounded-2xl p-3 border border-gray-100 dark:border-gray-800 shadow-lg shadow-gray-200/50 dark:shadow-none hover:shadow-2xl hover:shadow-pink-100/40 dark:hover:shadow-pink-900/10 transition-all duration-500 relative top-0 hover:-top-1">
                             
-                            {/* Image Container */}
-                            <div className="relative overflow-hidden rounded-[1.5rem] h-80 w-full bg-gray-100 dark:bg-gray-800">
+                            {/* Image Container - Radius Reduced for Premium Look */}
+                            <div className="relative overflow-hidden rounded-xl h-80 w-full bg-gray-50 dark:bg-gray-800">
                                 {/* Tag */}
                                 {product.tag && (
-                                    <div className="absolute top-4 left-4 z-20 bg-white/90 dark:bg-black/80 backdrop-blur text-gray-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm tracking-wide uppercase">
+                                    <div className="absolute top-3 left-3 z-20 bg-white/95 dark:bg-black/80 backdrop-blur text-gray-900 dark:text-white text-[10px] font-bold px-3 py-1 rounded-md shadow-sm tracking-widest uppercase">
                                         {product.tag}
                                     </div>
                                 )}
 
-                                {/* Main Image - Lazy Load Added */}
+                                {/* Main Image - Subtler Zoom */}
                                 <img 
                                     src={product.img} 
                                     alt={product.name}
                                     loading="lazy"      
                                     decoding="async"    
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
 
                                 {/* Hover Overlay & Actions */}
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 
-                                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out z-20 px-4">
+                                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out z-20 px-4">
                                     
-                                    {/* Add to Cart */}
-                                    <button className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-3 rounded-full shadow-lg hover:bg-pink-600 hover:text-white dark:hover:bg-pink-500 transition-colors" title="Add to Cart">
+                                    {/* Action Buttons */}
+                                    <button className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-2.5 rounded-full shadow-lg hover:bg-pink-600 hover:text-white dark:hover:bg-pink-500 transition-colors" title="Add to Cart">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                                     </button>
                                     
-                                    {/* Wishlist (Love Icon) */}
                                     <button 
                                         onClick={() => toggleWishlist(product.id)}
-                                        className={`p-3 rounded-full shadow-lg transition-all duration-300 transform active:scale-90 ${
+                                        className={`p-2.5 rounded-full shadow-lg transition-all duration-300 transform active:scale-90 ${
                                             wishlist.includes(product.id) 
                                             ? 'bg-pink-50 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400' 
                                             : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-pink-600 hover:text-white dark:hover:bg-pink-500'
@@ -130,10 +130,9 @@ const BestSelling = () => {
                                         </svg>
                                     </button>
 
-                                    {/* Quick View (Eye Icon) */}
                                     <button 
                                         onClick={() => setSelectedImage(product.img)}
-                                        className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-3 rounded-full shadow-lg hover:bg-pink-600 hover:text-white dark:hover:bg-pink-500 transition-colors" 
+                                        className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-2.5 rounded-full shadow-lg hover:bg-pink-600 hover:text-white dark:hover:bg-pink-500 transition-colors" 
                                         title="Quick View"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
@@ -141,8 +140,8 @@ const BestSelling = () => {
                                 </div>
                             </div>
 
-                            {/* Content */}
-                            <div className="pt-6 px-2">
+                            {/* Content (Text kept same as requested) */}
+                            <div className="pt-5 px-1">
                                 <div className="flex justify-between items-start mb-2">
                                     <h3 className="font-serif text-xl font-bold text-gray-900 dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors cursor-pointer">
                                         {product.name}
@@ -172,7 +171,7 @@ const BestSelling = () => {
                     </button>
                 </div>
 
-                {/* --- Image Modal / Lightbox --- */}
+                {/* --- Image Modal --- */}
                 {selectedImage && (
                     <div 
                         className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 transition-all duration-300"
@@ -180,9 +179,8 @@ const BestSelling = () => {
                     >
                         <div 
                             className="relative max-w-4xl w-full h-auto bg-transparent rounded-2xl overflow-hidden shadow-2xl transform transition-all scale-100"
-                            onClick={(e) => e.stopPropagation()} // Stop clicking inside from closing
+                            onClick={(e) => e.stopPropagation()}
                         >
-                            {/* Close Button */}
                             <button 
                                 onClick={() => setSelectedImage(null)}
                                 className="absolute top-4 right-4 bg-white/20 hover:bg-white text-white hover:text-black p-2 rounded-full transition-all duration-300 z-10 backdrop-blur-sm"
@@ -192,7 +190,6 @@ const BestSelling = () => {
                                 </svg>
                             </button>
                             
-                            {/* Large Image */}
                             <img 
                                 src={selectedImage} 
                                 alt="Product Detail" 
