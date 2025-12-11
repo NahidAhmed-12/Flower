@@ -1,6 +1,3 @@
-
-
-```markdown
 # 🌸 Bloom - Premium Flower Shop Landing Page
 
 A breathtaking, fully responsive, and animated Hero section for a premium Flower Shop. Built with **React** and **Tailwind CSS**, this project features dynamic background transitions, glassmorphism effects, and custom CSS animations to create an immersive user experience.
@@ -75,75 +72,5 @@ Make sure you have **Node.js** installed.
 **1. Clone the repository**
 ```bash
 git clone https://github.com/NahidAhmed-12/flower-shop.git
-```
 
-**2. Navigate to project directory**
-```bash
-cd flower-shop
-```
-
-**3. Install Dependencies**
-```bash
-npm install
-# or if you use yarn
-yarn install
-```
-
-**4. Start the Development Server**
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-The application will open automatically at `http://localhost:5173` (or your default Vite port).
-
----
-
-## 📂 Project Structure
-
-```bash
-src/
-├── assets/             
-│   └── Hero/           # Images (img-0.avif, img-1.avif, etc.)
-├── components/              
-│   ├── Hero.jsx        # Main Hero section with Slider & Animations
-│   ├── Navbar.jsx      # Navigation Bar
-│   └── Footer.jsx      # Footer section
-├── App.jsx             # Main Component
-└── index.css           # Tailwind Directives
-```
-
----
-
-## 🔮 Future Improvements
-
-- [ ] Add a full Product Listing page.
-- [ ] Implement "Add to Cart" functionality with Context API or Redux.
-- [ ] Backend integration for dynamic product data (Node.js/Express).
-- [ ] User Review section with real-time ratings.
-
----
-
-## 👤 Author
-
-**Nahid**  
-*Frontend Developer*
-
-Passionate about building beautiful web interfaces and solving complex frontend challenges.
-
-- **GitHub:** [@NahidAhmed-12](https://github.com/NahidAhmed-12)
-- **LinkedIn:** [Nahid Ahmed](#)
-- **Portfolio:** [My Portfolio](#)
-
----
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/NahidAhmed-12/flower-shop/issues).
-
----
-
-**Made with 🌹 & ❤️ by Nahid**
-```
 
