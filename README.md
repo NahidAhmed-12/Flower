@@ -103,7 +103,7 @@ The application will open automatically at `http://localhost:5173` (or your defa
 src/
 ├── assets/             
 │   └── Hero/           # Images (img-0.avif, img-1.avif, etc.)
-├── components/              
+├── pages/              
 │   ├── Hero.jsx        # Main Hero section with Slider & Animations
 │   ├── Navbar.jsx      # Navigation Bar
 │   └── Footer.jsx      # Footer section
