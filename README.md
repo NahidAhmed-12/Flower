@@ -71,7 +71,7 @@ Make sure you have **Node.js** installed.
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/NahidAhmed-12/flower-shop.git
+git clone https://github.com/NahidAhmed-12/Flower.git
 ```
 
 **2. Navigate to project directory**
@@ -137,7 +137,7 @@ Passionate about building beautiful web interfaces and solving complex frontend 
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/NahidAhmed-12/flower-shop/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/NahidAhmed-12/Flower.git/issues).
 
 ---
 
