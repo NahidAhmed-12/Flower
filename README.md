@@ -72,7 +72,7 @@ Make sure you have **Node.js** installed.
 **1. Clone the repository**
 ```bash
 git clone https://github.com/NahidAhmed-12/flower-shop.git
-
+```
 
 **2. Navigate to project directory**
 ```bash
@@ -142,4 +142,4 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 ---
 
 **Made with 🌹 & ❤️ by Nahid**
-```
+
