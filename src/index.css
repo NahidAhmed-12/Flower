@@ -1,1 +1,18 @@
 @tailwind base; @tailwind components; @tailwind utilities;
+
+
+
+
+:root, html, body {
+  background-color: #050505;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; 
+}
+
+::selection {
+  background-color: #d97706; /* Amber color */
+  color: #ffffff;
+}
